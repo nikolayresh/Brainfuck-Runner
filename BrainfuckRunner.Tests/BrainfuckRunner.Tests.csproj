@@ -1,0 +1,93 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ApplicationIcon />
+    <OutputType>Library</OutputType>
+    <StartupObject />
+    <RepositoryUrl></RepositoryUrl>
+    <PackageProjectUrl>https://github.com/nikolayresh/Brainfuck-Runner</PackageProjectUrl>
+    <Authors>Nikolay Reshetinsky</Authors>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageTags>brainfuck, interpreter, brainfuck-interpreter, brainfuck-parser</PackageTags>
+    <Version>1.0.7</Version>
+    <AssemblyVersion>1.0.7</AssemblyVersion>
+    <FileVersion>1.0.7</FileVersion>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="CodeFiles/99_Bottles_Of_Beer.bf" />
+    <None Remove="CodeFiles/alphabet.bf" />
+    <None Remove="CodeFiles/Bench_1.bf" />
+    <None Remove="CodeFiles/Bench_2.bf" />
+    <None Remove="CodeFiles/BusyBeaver.bf" />
+    <None Remove="CodeFiles/desktop.ini" />
+    <None Remove="CodeFiles/DisplayAscii.bf" />
+    <None Remove="CodeFiles/factor.bf" />
+    <None Remove="CodeFiles/Hanoi.bf" />
+    <None Remove="CodeFiles/HelloWorld.bf" />
+    <None Remove="CodeFiles/LetterA.bf" />
+    <None Remove="CodeFiles/long.bf" />
+    <None Remove="CodeFiles/Mandel.bf" />
+    <None Remove="CodeFiles/PrimeNumbers.bf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="CodeFiles\99_Bottles_Of_Beer.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\alphabet.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\Bench_1.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\Bench_2.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\BusyBeaver.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\desktop.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\DisplayAscii.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\factor.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\Hanoi.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\HelloWorld.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\LetterA.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\long.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\Mandel.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\PrimeNumbers.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BrainfuckRunner.Library\BrainfuckRunner.Library.csproj" />
+  </ItemGroup>
+
+</Project>

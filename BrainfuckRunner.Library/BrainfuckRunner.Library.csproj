@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <PackageProjectUrl>https://github.com/nikolayresh/Brainfuck-Runner</PackageProjectUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Nikolay Reshetinsky</Authors>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <RepositoryType>Library</RepositoryType>
+    <RepositoryUrl>https://github.com/nikolayresh/Brainfuck-Runner.git</RepositoryUrl>
+    <PackageTags>brainfuck, brainfuck interpreter, interpreter, brainfuck tokenizer, brainfuck validator</PackageTags>
+    <AssemblyVersion>1.0.7</AssemblyVersion>
+    <FileVersion>1.0.7</FileVersion>
+    <Description>Powerful Brainfuck language interpreter along with ability to tokenize &amp; validate the Brainfuck code</Description>
+    <Version>1.0.7</Version>
+    <PackageId>Brainfuck-Runner</PackageId>
+    <Product>Brainfuck Runner</Product>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Company>Nikolay Reshetinsky (777nickresh@gmail.com)</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>BrainfuckRunner.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+</Project>
