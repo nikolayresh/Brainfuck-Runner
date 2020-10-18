@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrainfuckRunner.Library", "BrainfuckRunner.Library\BrainfuckRunner.Library.csproj", "{B1A07496-CEBD-43E5-AF34-96BAD3983DC0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrainfuckRunner.Tests", "BrainfuckRunner.Tests\BrainfuckRunner.Tests.csproj", "{C0848B48-8179-4C65-AED0-1F4B4B37FA7C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B1A07496-CEBD-43E5-AF34-96BAD3983DC0}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{B1A07496-CEBD-43E5-AF34-96BAD3983DC0}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{B1A07496-CEBD-43E5-AF34-96BAD3983DC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1A07496-CEBD-43E5-AF34-96BAD3983DC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0848B48-8179-4C65-AED0-1F4B4B37FA7C}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{C0848B48-8179-4C65-AED0-1F4B4B37FA7C}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{C0848B48-8179-4C65-AED0-1F4B4B37FA7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0848B48-8179-4C65-AED0-1F4B4B37FA7C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {19EE52E6-FFB9-495F-8BE5-000369E2D120}
+	EndGlobalSection
+EndGlobal
