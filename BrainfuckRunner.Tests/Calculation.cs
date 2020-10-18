@@ -1,10 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BrainfuckRunner.Tests
 {
     internal static class Calculation
     {
+        internal static uint MultiplyFactors(List<uint> factors)
+        {
+            var result = (uint)1;
+
+            while (factors.Count != 0)
+            {
+                result *= factors[0];
+                factors.RemoveAt(0);
+            }
+
+            return result;
+        }
+
         internal static IEnumerable<uint> EnumeratePrimesUpTo(uint threshold)
         {
             if (threshold < 2)

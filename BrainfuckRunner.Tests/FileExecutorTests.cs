@@ -369,25 +369,12 @@ namespace BrainfuckRunner.Tests
             Assert.True(uint.TryParse(parts[0], out _));
             Assert.Equal(number, uint.Parse(parts[0]));
 
-            uint multiplyFactors()
-            {
-                var factors = parts[1].Trim()
-                    .Split((char)32)
-                    .Select(x => uint.Parse(x))
-                    .ToList();
+            var factors = parts[1].Trim()
+                .Split((char)32)
+                .Select(x => uint.Parse(x))
+                .ToList();
 
-                var result = (uint) 1;
-
-                for (var i = 0; i < factors.Count; i++)
-                {
-                    var mp = factors[i];
-                    result *= mp;
-                }
-
-                return result;
-            }
-
-            Assert.Equal(number, multiplyFactors());
+            Assert.Equal(number, Calculation.MultiplyFactors(factors));
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
