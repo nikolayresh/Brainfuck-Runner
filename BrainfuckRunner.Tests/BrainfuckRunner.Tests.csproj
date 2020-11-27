@@ -39,13 +39,9 @@
     <EmbeddedResource Include="CodeFiles\Alphabet.bf" />
     <EmbeddedResource Include="CodeFiles\BenchOne.bf" />
     <EmbeddedResource Include="CodeFiles\BenchTwo.bf" />
-    <EmbeddedResource Include="CodeFiles\BusyBeaver.bf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="CodeFiles\BusyBeaver.bf" />
     <EmbeddedResource Include="CodeFiles\DisplayAscii.bf" />
-    <EmbeddedResource Include="CodeFiles\Factor.bf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="CodeFiles\Factor.bf" />
     <EmbeddedResource Include="CodeFiles\Hanoi.bf" />
     <EmbeddedResource Include="CodeFiles\HelloWorld.bf" />
     <EmbeddedResource Include="CodeFiles\LetterA.bf" />
