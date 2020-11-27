@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using BrainfuckRunner.Library;
@@ -23,7 +24,7 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(Console.In, sw, size: 100, isOptimized: false);
 
-            var elapsed = engine.ExecuteFile(GetFilePath("LetterA.bf"));
+            var elapsed = engine.Execute(OpenText("LetterA.bf"));
             var output = sw.ToString();
 
             Assert.Equal("A", output);
@@ -37,7 +38,7 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(Console.In, sw, size: 100, isOptimized: true);
 
-            var elapsed = engine.ExecuteFile(GetFilePath("LetterA.bf"));
+            var elapsed = engine.Execute(OpenText("LetterA.bf"));
             var output = sw.ToString();
 
             Assert.Equal("A", output);
@@ -50,7 +51,7 @@ namespace BrainfuckRunner.Tests
         {
             var engine = new BfEngine(isOptimized: false);
 
-            var elapsed = engine.ExecuteFile(GetFilePath("Mandel.bf"));
+            var elapsed = engine.Execute(OpenText("Mandel.bf"));
 
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
@@ -61,7 +62,7 @@ namespace BrainfuckRunner.Tests
         {
             var engine = new BfEngine(isOptimized: true);
 
-            var elapsed = engine.ExecuteFile(GetFilePath("Mandel.bf"));
+            var elapsed = engine.Execute(OpenText("Mandel.bf"));
 
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
@@ -73,7 +74,7 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(Console.In, sw, isOptimized: false);
 
-            var elapsed = engine.ExecuteFile(GetFilePath("HelloWorld.bf"));
+            var elapsed = engine.Execute(OpenText("HelloWorld.bf"));
             var output = sw.ToString();
 
             Assert.Equal("Hello World!\n", output);
@@ -87,7 +88,7 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(Console.In, sw, isOptimized: true);
 
-            var elapsed = engine.ExecuteFile(GetFilePath("HelloWorld.bf"));
+            var elapsed = engine.Execute(OpenText("HelloWorld.bf"));
             var output = sw.ToString();
 
             Assert.Equal("Hello World!\n", output);
@@ -101,7 +102,7 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(Console.In, sw, isOptimized: false);
 
-            var elapsed = engine.ExecuteFile(GetFilePath("BusyBeaver.bf"));
+            var elapsed = engine.Execute(OpenText("BusyBeaver.bf"));
             var output = sw.ToString();
 
             Assert.Equal("OK\n", output);
@@ -115,7 +116,7 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(Console.In, sw, isOptimized: true);
 
-            var elapsed = engine.ExecuteFile(GetFilePath("BusyBeaver.bf"));
+            var elapsed = engine.Execute(OpenText("BusyBeaver.bf"));
             var output = sw.ToString();
 
             Assert.Equal("OK\n", output);
@@ -129,7 +130,7 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(Console.In, sw, isOptimized: false);
 
-            var elapsed = engine.ExecuteFile(GetFilePath("Bench_1.bf"));
+            var elapsed = engine.Execute(OpenText("BenchOne.bf"));
             var output = sw.ToString();
 
             Assert.Equal("OK", output);
@@ -143,7 +144,7 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(Console.In, sw, isOptimized: true);
 
-            var elapsed = engine.ExecuteFile(GetFilePath("Bench_1.bf"));
+            var elapsed = engine.Execute(OpenText("BenchOne.bf"));
             var output = sw.ToString();
 
             Assert.Equal("OK", output);
@@ -157,7 +158,7 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(Console.In, sw, isOptimized: false);
 
-            var elapsed = engine.ExecuteFile(GetFilePath("Hanoi.bf"));
+            var elapsed = engine.Execute(OpenText("Hanoi.bf"));
 
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
@@ -169,7 +170,7 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(Console.In, sw, isOptimized: true);
 
-            var elapsed = engine.ExecuteFile(GetFilePath("Hanoi.bf"));
+            var elapsed = engine.Execute(OpenText("Hanoi.bf"));
 
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
@@ -189,7 +190,7 @@ namespace BrainfuckRunner.Tests
                 expected += ch;
             } while (ch-- != 'A');
 
-            var elapsed = engine.ExecuteFile(GetFilePath("Bench_2.bf"));
+            var elapsed = engine.Execute(OpenText("BenchTwo.bf"));
             var output = sw.ToString();
 
             Assert.Equal($"{expected}\n", output);
@@ -211,7 +212,7 @@ namespace BrainfuckRunner.Tests
                 expected += ch;
             } while (ch-- != 'A');
 
-            var elapsed = engine.ExecuteFile(GetFilePath("Bench_2.bf"));
+            var elapsed = engine.Execute(OpenText("BenchTwo.bf"));
             var output = sw.ToString();
          
             Assert.Equal($"{expected}\n", output);
@@ -227,7 +228,7 @@ namespace BrainfuckRunner.Tests
 
             string expected = ((char)202).ToString();
 
-            var elapsed = engine.ExecuteFile(GetFilePath("long.bf"));
+            var elapsed = engine.Execute(OpenText("Long.bf"));
 
             Assert.Equal(expected, sw.ToString());
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
@@ -242,7 +243,7 @@ namespace BrainfuckRunner.Tests
 
             string expected = ((char)202).ToString();
 
-            var elapsed = engine.ExecuteFile(GetFilePath("long.bf"));
+            var elapsed = engine.Execute(OpenText("Long.bf"));
 
             Assert.Equal(expected, sw.ToString());
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
@@ -255,7 +256,7 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(Console.In, sw, isOptimized: false);
 
-            var elapsed = engine.ExecuteFile(GetFilePath("DisplayAscii.bf"));
+            var elapsed = engine.Execute(OpenText("DisplayAscii.bf"));
 
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
@@ -267,7 +268,7 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(Console.In, sw, isOptimized: true);
 
-            var elapsed = engine.ExecuteFile(GetFilePath("DisplayAscii.bf"));
+            var elapsed = engine.Execute(OpenText("DisplayAscii.bf"));
 
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
@@ -287,7 +288,7 @@ namespace BrainfuckRunner.Tests
                 expected += ch;
             } while (ch++ != 'Z');
 
-            var elapsed = engine.ExecuteFile(GetFilePath("alphabet.bf"));
+            var elapsed = engine.Execute(OpenText("Alphabet.bf"));
             var output = sw.ToString();
 
             Assert.Equal(expected, output);
@@ -309,7 +310,7 @@ namespace BrainfuckRunner.Tests
                 expected += ch;
             } while (ch++ != 'Z');
 
-            var elapsed = engine.ExecuteFile(GetFilePath("alphabet.bf"));
+            var elapsed = engine.Execute(OpenText("Alphabet.bf"));
             var output = sw.ToString();
 
             Assert.Equal(expected, output);
@@ -322,7 +323,7 @@ namespace BrainfuckRunner.Tests
         {
             var engine = new BfEngine(isOptimized: false);
 
-            var elapsed = engine.ExecuteFile(GetFilePath("99_Bottles_Of_Beer.bf"));
+            var elapsed = engine.Execute(OpenText("99_Bottles_Of_Beer.bf"));
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
@@ -332,7 +333,7 @@ namespace BrainfuckRunner.Tests
         {
             var engine = new BfEngine(isOptimized: true);
 
-            var elapsed = engine.ExecuteFile(GetFilePath("99_Bottles_Of_Beer.bf"));
+            var elapsed = engine.Execute(OpenText("99_Bottles_Of_Beer.bf"));
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
@@ -361,7 +362,7 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(sr, sw, size: 100, isOptimized: false);
 
-            var elapsed = engine.ExecuteFile(GetFilePath("factor.bf"));
+            var elapsed = engine.Execute(OpenText("Factor.bf"));
             var resultLine = sw.ToString();
             var parts = resultLine.Split(':');
 
@@ -405,7 +406,7 @@ namespace BrainfuckRunner.Tests
 
             //engine.OnCellOverflow = BfCellOverflowBehavior.SetThresholdValue;
 
-            var elapsed = engine.ExecuteFile(GetFilePath("factor.bf"));
+            var elapsed = engine.Execute(OpenText("Factor.bf"));
             var resultLine = sw.ToString();
             var parts = resultLine.Split(':');
 
@@ -482,7 +483,7 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(sr, sw, isOptimized: false);
 
-            var elapsed = engine.ExecuteFile(GetFilePath("PrimeNumbers.bf"));
+            var elapsed = engine.Execute(OpenText("PrimeNumbers.bf"));
             var output = sw.ToString();
             var parts = output.Split(':');
 
@@ -559,7 +560,7 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(sr, sw, isOptimized: true);
 
-            var elapsed = engine.ExecuteFile(GetFilePath("PrimeNumbers.bf"));
+            var elapsed = engine.Execute(OpenText("PrimeNumbers.bf"));
             var output = sw.ToString();
             var parts = output.Split(':');
 
@@ -576,11 +577,11 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        private static string GetFilePath(string file)
+        private static TextReader OpenText(string file)
         {
-            return Path.Combine(
-                Environment.CurrentDirectory,
-                $"CodeFiles\\{file}");
+            string path = string.Concat("BrainfuckRunner.Tests.CodeFiles.", file);
+            Stream stream = typeof(FileExecutorTests).Assembly.GetManifestResourceStream(path);
+            return new StreamReader(stream);
         }
     }
 }
