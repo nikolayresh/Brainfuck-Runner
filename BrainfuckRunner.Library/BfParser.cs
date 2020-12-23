@@ -64,6 +64,9 @@ namespace BrainfuckRunner.Library
             return cmd != BfCommand.Unknown;
         }
 
+        /// <summary>
+        /// State of parser
+        /// </summary>
         internal enum ParserState
         {
             NonComment,
@@ -127,7 +130,6 @@ namespace BrainfuckRunner.Library
                 case ParserState.NonComment:
                     if (ch == _comment.StartTag.First())
                     {
-                        _bufferStartTag.Clear();
                         _bufferStartTag.Append(ch);
                         _state = ParserState.CommentStart;
                     }
@@ -137,14 +139,14 @@ namespace BrainfuckRunner.Library
                     _bufferStartTag.Append(ch);
                     if (string.Equals(_comment.StartTag, _bufferStartTag.ToString()))
                     {
+                        _bufferStartTag.Clear();
                         _state = ParserState.CommentBody;
                     }
                     break;
 
                 case ParserState.CommentBody:
                     if (ch == _comment.EndTag.First())
-                    { 
-                        _bufferEndTag.Clear();
+                    {
                         _bufferEndTag.Append(ch);
                         _state = ParserState.CommentEnd;
                     }
@@ -154,6 +156,7 @@ namespace BrainfuckRunner.Library
                     _bufferEndTag.Append(ch);
                     if (string.Equals(_comment.EndTag, _bufferEndTag.ToString()))
                     {
+                        _bufferEndTag.Clear();
                         _state = ParserState.NonComment;
                     }
                     break;

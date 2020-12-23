@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using BrainfuckRunner.Library;
 using Xunit;
@@ -248,7 +247,8 @@ namespace BrainfuckRunner.Tests
         public void execute_LongRunningFile()
         {
             var sw = new StringWriter();
-            var engine = new BfEngine(new BfEngineOptions().WithOutput(sw)
+            var engine = new BfEngine(new BfEngineOptions()
+                .WithOutput(sw)
                 .WithStandardExecutor());
 
             string expected = ((char)202).ToString();
@@ -264,7 +264,8 @@ namespace BrainfuckRunner.Tests
         public void execute_optimized_LongRunningFile()
         {
             var sw = new StringWriter();
-            var engine = new BfEngine(new BfEngineOptions().WithOutput(sw)
+            var engine = new BfEngine(new BfEngineOptions()
+                .WithOutput(sw)
                 .WithOptimizedExecutor());
 
             string expected = ((char)202).ToString();
@@ -355,7 +356,8 @@ namespace BrainfuckRunner.Tests
         [Trait("Is optimized", "No")]
         public void execute_99_Bottles_Of_Beer()
         {
-            var engine = new BfEngine(new BfEngineOptions().WithStandardExecutor());
+            var engine = new BfEngine(new BfEngineOptions()
+                .WithStandardExecutor());
 
             var elapsed = engine.Execute(OpenText("99_Bottles_Of_Beer.bf"));
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
@@ -365,7 +367,8 @@ namespace BrainfuckRunner.Tests
         [Trait("Is optimized", "Yes")]
         public void execute_optimized_99_Bottles_Of_Beer()
         {
-            var engine = new BfEngine(new BfEngineOptions().WithOptimizedExecutor());
+            var engine = new BfEngine(new BfEngineOptions()
+                .WithOptimizedExecutor());
 
             var elapsed = engine.Execute(OpenText("99_Bottles_Of_Beer.bf"));
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
@@ -409,7 +412,7 @@ namespace BrainfuckRunner.Tests
 
             var factors = parts[1].Trim()
                 .Split((char)32)
-                .Select(x => uint.Parse(x))
+                .Select(uint.Parse)
                 .ToList();
 
             Assert.Equal(number, Calculation.MultiplyFactors(factors));
@@ -439,11 +442,10 @@ namespace BrainfuckRunner.Tests
         {
             var sr = new StringReader($"{number}\n");
             var sw = new StringWriter();
-            var engine = new BfEngine(new BfEngineOptions().WithInput(sr)
+            var engine = new BfEngine(new BfEngineOptions()
+                .WithInput(sr)
                 .WithOutput(sw)
                 .WithOptimizedExecutor());
-
-            //engine.OnCellOverflow = BfCellOverflowBehavior.SetThresholdValue;
 
             var elapsed = engine.Execute(OpenText("Factor.bf"));
             var resultLine = sw.ToString();
@@ -455,7 +457,7 @@ namespace BrainfuckRunner.Tests
 
             var factors = parts[1].Trim()
                 .Split((char)32)
-                .Select(x => uint.Parse(x))
+                .Select(uint.Parse)
                 .ToList();
 
             Assert.Equal(number, Calculation.MultiplyFactors(factors));
@@ -612,8 +614,9 @@ namespace BrainfuckRunner.Tests
             Assert.True(parts.Length == 2);
             Assert.Equal("Primes up to", parts[0]);
 
-            var primes = parts[1].Trim().Split((char)32)
-                .Select(x => uint.Parse(x))
+            var primes = parts[1].Trim()
+                .Split((char)32)
+                .Select(uint.Parse)
                 .ToList();
 
             var expectedPrimes = Calculation.EnumeratePrimesUpTo(threshold).ToList();
@@ -624,8 +627,8 @@ namespace BrainfuckRunner.Tests
 
         private static TextReader OpenText(string file)
         {
-            string path = string.Concat("BrainfuckRunner.Tests.CodeFiles.", file);
-            Stream stream = typeof(FileExecutorTests).Assembly.GetManifestResourceStream(path);
+            var path = string.Concat("BrainfuckRunner.Tests.CodeFiles.", file);
+            var stream = typeof(FileExecutorTests).Assembly.GetManifestResourceStream(path);
             return new StreamReader(stream);
         }
     }

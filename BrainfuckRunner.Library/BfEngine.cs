@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using BrainfuckRunner.Library.Behaviors;
 using BrainfuckRunner.Library.Executors;
 using BrainfuckRunner.Library.Tokens;
@@ -135,18 +134,6 @@ namespace BrainfuckRunner.Library
                 yield return (char) nextChar;
             }
         }
-        #endregion
-
-        private readonly byte[] _cells;
-        private readonly List<BfCommand> _commands;
-        private readonly BfCommentPattern _commentPattern;
-        private readonly bool _isOptimized;
-
-        private int _ptr;
-        private TextReader _input;
-        private TextWriter _output;
-        private BfCellOverflowBehavior _onCellOverflow;
-        private BfMemoryOverflowBehavior _onMemoryOverflow;
 
         private static BfEngineOptions ValidateOptions(IOptions<BfEngineOptions> iOptions)
         {
@@ -169,8 +156,76 @@ namespace BrainfuckRunner.Library
                     nameof(iOptions.Value.TapeSize));
             }
 
+            if (options.Input is null)
+            {
+                throw new ArgumentNullException(nameof(iOptions.Value.Input));
+            }
+
+            if (options.Output is null)
+            {
+                throw new ArgumentNullException(nameof(iOptions.Value.Output));
+            }
+
+            if (options.CommentPattern != null)
+            {
+                var startTag = options.CommentPattern.StartTag;
+                var endTag = options.CommentPattern.EndTag;
+
+                if (string.IsNullOrWhiteSpace(startTag))
+                {
+                    throw new ArgumentException(
+                        "Start tag of comment is not defined",
+                        nameof(iOptions.Value.CommentPattern.StartTag));
+                }
+
+                if (startTag.Length != startTag.Trim().Length)
+                {
+                    throw new ArgumentException(
+                        "Start tag of comment contains leading or trailing whitespaces",
+                        nameof(iOptions.Value.CommentPattern.StartTag));
+                }
+
+                if (startTag.Any(x => BfParser.IsBrainfuckCommand(x, out _)))
+                {
+                    throw new ArgumentException("Start tag of comment contains Brainfuck command character(s)",
+                        nameof(iOptions.Value.CommentPattern.StartTag));
+                }
+
+                if (string.IsNullOrWhiteSpace(endTag))
+                {
+                    throw new ArgumentException(
+                        "End tag of comment is not defined",
+                        nameof(iOptions.Value.CommentPattern.EndTag));
+                }
+
+                if (endTag.Length != endTag.Trim().Length)
+                {
+                    throw new ArgumentException(
+                        "End tag of comment contains leading or trailing whitespaces",
+                        nameof(iOptions.Value.CommentPattern.EndTag));
+                }
+
+                if (endTag.Any(x => BfParser.IsBrainfuckCommand(x, out _)))
+                {
+                    throw new ArgumentException("End tag of comment contains Brainfuck command character(s)",
+                        nameof(iOptions.Value.CommentPattern.EndTag));
+                }
+            }
+
             return options;
         }
+        #endregion
+
+        private readonly byte[] _cells;
+        private readonly List<BfCommand> _commands;
+        private readonly BfCommentPattern _commentPattern;
+        private readonly bool _isOptimized;
+
+        private int _ptr;
+        private TextReader _input;
+        private TextWriter _output;
+        private BfCellOverflowBehavior _onCellOverflow;
+        private BfMemoryOverflowBehavior _onMemoryOverflow;
 
         public BfEngine(IOptions<BfEngineOptions> iOptions)
         {
