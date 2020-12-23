@@ -81,7 +81,7 @@ namespace BrainfuckRunner.Library
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         internal static bool IsLoopCmd(this BfCommand cmd)
         {
             switch (cmd)
@@ -98,7 +98,7 @@ namespace BrainfuckRunner.Library
         /// <summary>
         /// Calculates modulo of a specified number with respect to base threshold 
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         internal static int Mod(int value, int @base)
         {
             return (@base + (value % @base)) % @base;

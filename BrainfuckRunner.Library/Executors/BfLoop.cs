@@ -31,7 +31,7 @@ namespace BrainfuckRunner.Library
         /// </summary>
         internal int StartPosition
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [MethodImpl(MethodImplOptions.AggressiveOptimization)]
             get => _startPos;
             set => _startPos = value;
         }
@@ -41,7 +41,7 @@ namespace BrainfuckRunner.Library
         /// </summary>
         internal int EndPosition
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [MethodImpl(MethodImplOptions.AggressiveOptimization)]
             get => _endPos;
             set => _endPos = value;
         }
@@ -53,7 +53,7 @@ namespace BrainfuckRunner.Library
         /// </summary>
         internal bool? ZeroState
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [MethodImpl(MethodImplOptions.AggressiveOptimization)]
             get => _zeroState;
             set => _zeroState = value;
         }
@@ -63,7 +63,7 @@ namespace BrainfuckRunner.Library
         /// </summary>
         internal int? ScanStep
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [MethodImpl(MethodImplOptions.AggressiveOptimization)]
             get => _scanStep;
             set => _scanStep = value;
         }
@@ -74,7 +74,7 @@ namespace BrainfuckRunner.Library
         /// </summary>
         internal BfLoopOffsets Offsets
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [MethodImpl(MethodImplOptions.AggressiveOptimization)]
             get => _offsets;
             set => _offsets = value;
         }
@@ -84,7 +84,7 @@ namespace BrainfuckRunner.Library
         /// </summary>
         internal int ContentLength
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [MethodImpl(MethodImplOptions.AggressiveOptimization)]
             get => _endPos - _startPos - 1;
         }
 
@@ -94,7 +94,7 @@ namespace BrainfuckRunner.Library
         /// </summary>
         internal bool IsEmpty
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [MethodImpl(MethodImplOptions.AggressiveOptimization)]
             get => (_endPos - _startPos) == 1;
         }
 
@@ -103,15 +103,9 @@ namespace BrainfuckRunner.Library
         /// </summary>
         internal int SubLoops
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            [MethodImpl(MethodImplOptions.AggressiveOptimization)]
             get => _subLoops;
             set => _subLoops = value;
-        }
-
-        internal string GetContentAsText(BfEngine engine)
-        {
-            var commands = GetLoopCommands(this, engine);
-            return string.Join(null, commands.Select(cmd => BfText.ToChar(cmd)));
         }
     }
 }
