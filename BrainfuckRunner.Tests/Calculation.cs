@@ -9,11 +9,7 @@ namespace BrainfuckRunner.Tests
         {
             var result = (uint)1;
 
-            while (factors.Count != 0)
-            {
-                result *= factors[0];
-                factors.RemoveAt(0);
-            }
+            factors.ForEach(x => result *= x);
 
             return result;
         }
@@ -38,9 +34,9 @@ namespace BrainfuckRunner.Tests
 
         private static bool IsPrimeNumber(uint number)
         {
-            for (uint divider = 2; divider <= (uint) Math.Sqrt(number); divider++)
+            for (uint divisor = 2; divisor <= (uint) Math.Floor(Math.Sqrt(number)); divisor++)
             {
-                if ((number % divider) == 0)
+                if (number % divisor == 0)
                 {
                     return false;
                 }

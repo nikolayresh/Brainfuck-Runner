@@ -16,7 +16,7 @@ namespace BrainfuckRunner.Library
         static BfValidator()
         {
             EscapedCommandSet = string.Concat(
-                BfText.CommandSet
+                BfParser.CommandSet
                     .Select(cmd => $@"\{cmd}")
             );
         }
@@ -35,7 +35,7 @@ namespace BrainfuckRunner.Library
             {
                 var ch = code[i];
 
-                if (!BfText.IsBrainfuckCommand(ch, out var cmd))
+                if (!BfParser.IsBrainfuckCommand(ch, out var cmd))
                 {
                     plainText.Append(ch);
                     continue;

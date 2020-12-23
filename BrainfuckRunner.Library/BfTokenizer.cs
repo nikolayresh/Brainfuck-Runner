@@ -23,7 +23,7 @@ namespace BrainfuckRunner.Library
             {
                 var ch = code[i];
 
-                if (!BfText.IsBrainfuckCommand(ch, out var cmd))
+                if (!BfParser.IsBrainfuckCommand(ch, out var cmd))
                 {
                     plainText.Append(ch);
                     continue;
