@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace BrainfuckRunner.Library
+namespace BrainfuckRunner.Library.Executors
 {
     /// <summary>
     /// Brainfuck loop entity

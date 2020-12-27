@@ -219,14 +219,13 @@ namespace BrainfuckRunner.Library
         private readonly byte[] _cells;
         private readonly List<BfCommand> _commands;
         private readonly BfCommentPattern _commentPattern;
+        private readonly BfCellOverflowBehavior _onCellOverflow;
+        private readonly BfMemoryOverflowBehavior _onMemoryOverflow;
         private readonly bool _isOptimized;
-
+        private readonly TextReader _input;
+        private readonly TextWriter _output;
         private int _ptr;
-        private TextReader _input;
-        private TextWriter _output;
-        private BfCellOverflowBehavior _onCellOverflow;
-        private BfMemoryOverflowBehavior _onMemoryOverflow;
-
+        
         public BfEngine(IOptions<BfEngineOptions> iOptions)
         {
             var options = ValidateOptions(iOptions);
@@ -255,7 +254,7 @@ namespace BrainfuckRunner.Library
         }
 
         /// <summary>
-        /// Gets or sets reader to process Brainfuck READ commands
+        /// Gets or sets textSource to process Brainfuck READ commands
         /// </summary>
         public TextReader Input
         {
@@ -351,9 +350,7 @@ namespace BrainfuckRunner.Library
         public byte[] GetCells()
         {
             var result = new byte[_cells.Length];
-
             Array.Copy(_cells, result, _cells.Length);
-
             return result;
         }
 
@@ -363,9 +360,7 @@ namespace BrainfuckRunner.Library
         public BfCommand[] GetCommands()
         {
             var result = new BfCommand[_commands.Count];
-
             _commands.CopyTo(result);
-
             return result;
         }
 
@@ -378,13 +373,13 @@ namespace BrainfuckRunner.Library
             get => _isOptimized;
         }
 
-        private void ReadBrainfuckCommands(TextReader reader)
+        private void ReadBrainfuckCommands(TextReader text)
         {
             var loops = 0;
-            var parser = new BfParser(_commentPattern);
+            var parser = new BfParser(_commentPattern, text);
             BfCommand cmd;
 
-            while ((cmd = parser.ParseNextCommand(reader)) != BfCommand.EndOfFile)
+            while ((cmd = parser.ParseNextCommand()) != BfCommand.EndOfFile)
             {
                 _commands.Add(cmd);
 
@@ -437,7 +432,6 @@ namespace BrainfuckRunner.Library
             while (iNextCmd < _commands.Count)
             {
                 cmd = _commands[iNextCmd];
-
                 executor.RunCommand(cmd, ref iNextCmd);
             }
 

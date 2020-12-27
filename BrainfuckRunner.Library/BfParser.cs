@@ -69,33 +69,51 @@ namespace BrainfuckRunner.Library
         /// </summary>
         internal enum ParserState
         {
-            NonComment,
+            /// <summary>
+            /// Initial state of parser. Reading non-comment content
+            /// </summary>
+            NonComment = 0,
+
+            /// <summary>
+            /// Parser is reading string that starts a comment literal
+            /// </summary>
             CommentStart,
+
+            /// <summary>
+            /// Parser is skipping comment body
+            /// </summary>
             CommentBody,
+
+            /// <summary>
+            /// Parser is reading string that ends a comment literal
+            /// </summary>
             CommentEnd
         }
 
-        private readonly BfCommentPattern _comment;
+
         private readonly StringBuilder _bufferStartTag;
         private readonly StringBuilder _bufferEndTag;
-        private ParserState _state;
+        private readonly BfCommentPattern _comment;
+        private readonly TextReader _text;
+        private ParserState _nextState;
 
-        internal BfParser(BfCommentPattern comment)
+        internal BfParser(BfCommentPattern comment, TextReader text)
         {
             _comment = comment;
+            _text = text;
             _bufferStartTag = new StringBuilder();
             _bufferEndTag = new StringBuilder();
-            _state = ParserState.NonComment;
+            _nextState = ParserState.NonComment;
         }
 
-        internal BfCommand ParseNextCommand(TextReader text)
+        internal BfCommand ParseNextCommand()
         {
             int nextChar;
             BfCommand cmd;
 
             while (true)
             {
-                nextChar = text.Read();
+                nextChar = _text.Read();
 
                 if (nextChar != Eof)
                 {
@@ -125,13 +143,15 @@ namespace BrainfuckRunner.Library
 
             var ch = (char) nextChar;
 
-            switch (_state)
+            switch (_nextState)
             {
                 case ParserState.NonComment:
                     if (ch == _comment.StartTag.First())
                     {
                         _bufferStartTag.Append(ch);
-                        _state = ParserState.CommentStart;
+                        _nextState = string.Equals(_comment.StartTag, _bufferStartTag.ToString())
+                            ? ParserState.CommentBody
+                            : ParserState.CommentStart;
                     }
                     break;
 
@@ -140,7 +160,7 @@ namespace BrainfuckRunner.Library
                     if (string.Equals(_comment.StartTag, _bufferStartTag.ToString()))
                     {
                         _bufferStartTag.Clear();
-                        _state = ParserState.CommentBody;
+                        _nextState = ParserState.CommentBody;
                     }
                     break;
 
@@ -148,7 +168,9 @@ namespace BrainfuckRunner.Library
                     if (ch == _comment.EndTag.First())
                     {
                         _bufferEndTag.Append(ch);
-                        _state = ParserState.CommentEnd;
+                        _nextState = string.Equals(_comment.EndTag, _bufferEndTag.ToString())
+                            ? ParserState.NonComment
+                            : ParserState.CommentEnd;
                     }
                     break;
 
@@ -157,14 +179,14 @@ namespace BrainfuckRunner.Library
                     if (string.Equals(_comment.EndTag, _bufferEndTag.ToString()))
                     {
                         _bufferEndTag.Clear();
-                        _state = ParserState.NonComment;
+                        _nextState = ParserState.NonComment;
                     }
                     break;
             }
 
-            return _state == ParserState.CommentStart ||
-                   _state == ParserState.CommentBody ||
-                   _state == ParserState.CommentEnd;
+            return _nextState == ParserState.CommentStart ||
+                   _nextState == ParserState.CommentBody ||
+                   _nextState == ParserState.CommentEnd;
         }
     }
 }

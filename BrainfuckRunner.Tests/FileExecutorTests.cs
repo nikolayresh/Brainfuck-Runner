@@ -22,7 +22,7 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(new BfEngineOptions()
                 .WithOutput(sw)
-                .WithStandardExecutor());
+                .WithSimpleExecutor());
 
             var elapsed = engine.Execute(OpenText("LetterA.bf"));
             var output = sw.ToString();
@@ -52,10 +52,9 @@ namespace BrainfuckRunner.Tests
         public void execute_Mandel()
         {
             var engine = new BfEngine(new BfEngineOptions()
-                .WithStandardExecutor());
+                .WithSimpleExecutor());
 
             var elapsed = engine.Execute(OpenText("Mandel.bf"));
-
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
@@ -77,7 +76,7 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(new BfEngineOptions()
                 .WithOutput(sw)
-                .WithStandardExecutor());
+                .WithSimpleExecutor());
 
             var elapsed = engine.Execute(OpenText("HelloWorld.bf"));
             var output = sw.ToString();
@@ -109,7 +108,7 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(new BfEngineOptions()
                 .WithOutput(sw)
-                .WithStandardExecutor());
+                .WithSimpleExecutor());
 
             var elapsed = engine.Execute(OpenText("BusyBeaver.bf"));
             var output = sw.ToString();
@@ -141,7 +140,7 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(new BfEngineOptions()
                 .WithOutput(sw)
-                .WithStandardExecutor());
+                .WithSimpleExecutor());
 
             var elapsed = engine.Execute(OpenText("BenchOne.bf"));
             var output = sw.ToString();
@@ -173,10 +172,9 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(new BfEngineOptions()
                 .WithOutput(sw)
-                .WithStandardExecutor());
+                .WithSimpleExecutor());
 
             var elapsed = engine.Execute(OpenText("Hanoi.bf"));
-
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
@@ -190,7 +188,6 @@ namespace BrainfuckRunner.Tests
                 .WithOptimizedExecutor());
 
             var elapsed = engine.Execute(OpenText("Hanoi.bf"));
-
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
@@ -201,10 +198,10 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(new BfEngineOptions()
                 .WithOutput(sw)
-                .WithStandardExecutor());
+                .WithSimpleExecutor());
 
-            string expected = string.Empty;
-            char ch = 'Z';
+            var expected = string.Empty;
+            var ch = 'Z';
 
             do
             {
@@ -227,8 +224,8 @@ namespace BrainfuckRunner.Tests
                 .WithOutput(sw)
                 .WithOptimizedExecutor());
 
-            string expected = string.Empty;
-            char ch = 'Z';
+            var expected = string.Empty;
+            var ch = 'Z';
 
             do
             {
@@ -249,10 +246,9 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(new BfEngineOptions()
                 .WithOutput(sw)
-                .WithStandardExecutor());
+                .WithSimpleExecutor());
 
-            string expected = ((char)202).ToString();
-
+            var expected = ((char)202).ToString();
             var elapsed = engine.Execute(OpenText("Long.bf"));
 
             Assert.Equal(expected, sw.ToString());
@@ -268,8 +264,7 @@ namespace BrainfuckRunner.Tests
                 .WithOutput(sw)
                 .WithOptimizedExecutor());
 
-            string expected = ((char)202).ToString();
-
+            var expected = ((char)202).ToString();
             var elapsed = engine.Execute(OpenText("Long.bf"));
 
             Assert.Equal(expected, sw.ToString());
@@ -283,10 +278,9 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(new BfEngineOptions()
                 .WithOutput(sw)
-                .WithStandardExecutor());
+                .WithSimpleExecutor());
 
             var elapsed = engine.Execute(OpenText("DisplayAscii.bf"));
-
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
@@ -300,7 +294,6 @@ namespace BrainfuckRunner.Tests
                 .WithOptimizedExecutor());
 
             var elapsed = engine.Execute(OpenText("DisplayAscii.bf"));
-
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
@@ -311,7 +304,7 @@ namespace BrainfuckRunner.Tests
             var sw = new StringWriter();
             var engine = new BfEngine(new BfEngineOptions()
                 .WithOutput(sw)
-                .WithStandardExecutor());
+                .WithSimpleExecutor());
 
             var expected = string.Empty;
             var ch = 'A';
@@ -357,7 +350,7 @@ namespace BrainfuckRunner.Tests
         public void execute_99_Bottles_Of_Beer()
         {
             var engine = new BfEngine(new BfEngineOptions()
-                .WithStandardExecutor());
+                .WithSimpleExecutor());
 
             var elapsed = engine.Execute(OpenText("99_Bottles_Of_Beer.bf"));
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
@@ -400,7 +393,7 @@ namespace BrainfuckRunner.Tests
             var engine = new BfEngine(new BfEngineOptions()
                 .WithInput(sr)
                 .WithOutput(sw)
-                .WithStandardExecutor());
+                .WithSimpleExecutor());
 
             var elapsed = engine.Execute(OpenText("Factor.bf"));
             var resultLine = sw.ToString();
@@ -525,7 +518,7 @@ namespace BrainfuckRunner.Tests
             var engine = new BfEngine(new BfEngineOptions()
                 .WithInput(sr)
                 .WithOutput(sw)
-                .WithStandardExecutor());
+                .WithSimpleExecutor());
 
             var elapsed = engine.Execute(OpenText("PrimeNumbers.bf"));
             var output = sw.ToString();
@@ -534,8 +527,9 @@ namespace BrainfuckRunner.Tests
             Assert.True(parts.Length == 2);
             Assert.Equal("Primes up to", parts[0]);
 
-            var primes = parts[1].Trim().Split((char)32)
-                .Select(x => uint.Parse(x))
+            var primes = parts[1].Trim()
+                .Split((char)32)
+                .Select(uint.Parse)
                 .ToList();
 
             var expectedPrimes = Calculation.EnumeratePrimesUpTo(threshold).ToList();

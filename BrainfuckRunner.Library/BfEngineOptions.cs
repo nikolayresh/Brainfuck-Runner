@@ -5,8 +5,14 @@ using Microsoft.Extensions.Options;
 
 namespace BrainfuckRunner.Library
 {
+    /// <summary>
+    /// Options used to adjust execution of Brainfuck interpreting engine
+    /// </summary>
     public sealed class BfEngineOptions : IOptions<BfEngineOptions>
     {
+        /// <summary>
+        /// By default, Brainfuck interpreter uses 30,000 cells for most cases
+        /// </summary>
         public const int PresetTapeSize = 30_000;
 
         public int TapeSize { get; set; } = PresetTapeSize;
@@ -47,13 +53,25 @@ namespace BrainfuckRunner.Library
             return this;
         }
 
+        public BfEngineOptions WithConsoleInput()
+        {
+            Input = Console.In;
+            return this;
+        }
+
+        public BfEngineOptions WithConsoleOutput()
+        {
+            Output = Console.Out;
+            return this;
+        }
+
         public BfEngineOptions WithOptimizedExecutor()
         {
             UseOptimizedExecutor = true;
             return this;
         }
 
-        public BfEngineOptions WithStandardExecutor()
+        public BfEngineOptions WithSimpleExecutor()
         {
             UseOptimizedExecutor = false;
             return this;

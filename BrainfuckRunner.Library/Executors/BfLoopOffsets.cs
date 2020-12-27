@@ -2,7 +2,7 @@
 using System.Linq;
 using BrainfuckRunner.Library.Behaviors;
 
-namespace BrainfuckRunner.Library
+namespace BrainfuckRunner.Library.Executors
 {
     internal sealed class BfLoopOffsets
     {

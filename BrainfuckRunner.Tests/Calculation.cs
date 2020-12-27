@@ -8,9 +8,7 @@ namespace BrainfuckRunner.Tests
         internal static uint MultiplyFactors(List<uint> factors)
         {
             var result = (uint)1;
-
             factors.ForEach(x => result *= x);
-
             return result;
         }
 
