@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace BrainfuckRunner.Library
@@ -77,7 +76,7 @@ namespace BrainfuckRunner.Library
             /// <summary>
             /// Parser is reading string that starts a comment literal
             /// </summary>
-            CommentStart,
+            OpeningComment,
 
             /// <summary>
             /// Parser is skipping comment body
@@ -87,7 +86,7 @@ namespace BrainfuckRunner.Library
             /// <summary>
             /// Parser is reading string that ends a comment literal
             /// </summary>
-            CommentEnd
+            ClosingComment
         }
 
 
@@ -97,7 +96,7 @@ namespace BrainfuckRunner.Library
         private readonly TextReader _text;
         private ParserState _nextState;
 
-        internal BfParser(BfCommentPattern comment, TextReader text)
+        internal BfParser(TextReader text, BfCommentPattern comment)
         {
             _comment = comment;
             _text = text;
@@ -146,16 +145,16 @@ namespace BrainfuckRunner.Library
             switch (_nextState)
             {
                 case ParserState.NonComment:
-                    if (ch == _comment.StartTag.First())
+                    if (ch == _comment.StartTag[0])
                     {
                         _bufferStartTag.Append(ch);
                         _nextState = string.Equals(_comment.StartTag, _bufferStartTag.ToString())
                             ? ParserState.CommentBody
-                            : ParserState.CommentStart;
+                            : ParserState.OpeningComment;
                     }
                     break;
 
-                case ParserState.CommentStart:
+                case ParserState.OpeningComment:
                     _bufferStartTag.Append(ch);
                     if (string.Equals(_comment.StartTag, _bufferStartTag.ToString()))
                     {
@@ -165,16 +164,16 @@ namespace BrainfuckRunner.Library
                     break;
 
                 case ParserState.CommentBody:
-                    if (ch == _comment.EndTag.First())
+                    if (ch == _comment.EndTag[0])
                     {
                         _bufferEndTag.Append(ch);
                         _nextState = string.Equals(_comment.EndTag, _bufferEndTag.ToString())
                             ? ParserState.NonComment
-                            : ParserState.CommentEnd;
+                            : ParserState.ClosingComment;
                     }
                     break;
 
-                case ParserState.CommentEnd:
+                case ParserState.ClosingComment:
                     _bufferEndTag.Append(ch);
                     if (string.Equals(_comment.EndTag, _bufferEndTag.ToString()))
                     {
@@ -184,9 +183,9 @@ namespace BrainfuckRunner.Library
                     break;
             }
 
-            return _nextState == ParserState.CommentStart ||
+            return _nextState == ParserState.OpeningComment ||
                    _nextState == ParserState.CommentBody ||
-                   _nextState == ParserState.CommentEnd;
+                   _nextState == ParserState.ClosingComment;
         }
     }
 }

@@ -181,7 +181,7 @@ namespace BrainfuckRunner.Library
                 if (startTag.Length != startTag.Trim().Length)
                 {
                     throw new ArgumentException(
-                        "Start tag of comment contains leading or trailing whitespaces",
+                        "Start tag of comment contains leading or trailing whitespace(s)",
                         nameof(iOptions.Value.CommentPattern.StartTag));
                 }
 
@@ -201,7 +201,7 @@ namespace BrainfuckRunner.Library
                 if (endTag.Length != endTag.Trim().Length)
                 {
                     throw new ArgumentException(
-                        "End tag of comment contains leading or trailing whitespaces",
+                        "End tag of comment contains leading or trailing whitespace(s)",
                         nameof(iOptions.Value.CommentPattern.EndTag));
                 }
 
@@ -376,7 +376,7 @@ namespace BrainfuckRunner.Library
         private void ReadBrainfuckCommands(TextReader text)
         {
             var loops = 0;
-            var parser = new BfParser(_commentPattern, text);
+            var parser = new BfParser(text, _commentPattern);
             BfCommand cmd;
 
             while ((cmd = parser.ParseNextCommand()) != BfCommand.EndOfFile)
