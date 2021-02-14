@@ -313,7 +313,7 @@ namespace BrainfuckRunner.Library.Executors
                 return false;
             }
 
-            if (loop.ScanStep is null)
+            if (loop.ScanStep == null)
             {
                 var commands = Engine.Commands;
                 var iCmd = loop.StartPosition + 1;

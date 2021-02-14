@@ -61,7 +61,6 @@ namespace BrainfuckRunner.Library.Executors
                     case BfCommand.Decrement:
                         delta.Value--;
                         continue;
-
                     case BfCommand.Increment:
                         delta.Value++;
                         continue;

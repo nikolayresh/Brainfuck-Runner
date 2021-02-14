@@ -91,7 +91,7 @@ namespace BrainfuckRunner.Library.Tokens
         {
             get
             {
-                if (_parent is null)
+                if (_parent == null)
                 {
                     return @null;
                 }

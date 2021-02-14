@@ -1,9 +1,10 @@
 ﻿using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace BrainfuckRunner.Library
 {
-    internal sealed class BfParser
+    internal static class BfParser
     {
         /// <summary>
         /// Defines state when end of file reached
@@ -64,128 +65,30 @@ namespace BrainfuckRunner.Library
         }
 
         /// <summary>
-        /// State of parser
+        /// Returns a next parsed Brainfuck command
         /// </summary>
-        internal enum ParserState
-        {
-            /// <summary>
-            /// Initial state of parser. Reading non-comment content
-            /// </summary>
-            NonComment = 0,
-
-            /// <summary>
-            /// Parser is reading string that starts a comment literal
-            /// </summary>
-            OpeningComment,
-
-            /// <summary>
-            /// Parser is skipping comment body
-            /// </summary>
-            CommentBody,
-
-            /// <summary>
-            /// Parser is reading string that ends a comment literal
-            /// </summary>
-            ClosingComment
-        }
-
-
-        private readonly StringBuilder _bufferStartTag;
-        private readonly StringBuilder _bufferEndTag;
-        private readonly BfCommentPattern _comment;
-        private readonly TextReader _text;
-        private ParserState _nextState;
-
-        internal BfParser(TextReader text, BfCommentPattern comment)
-        {
-            _comment = comment;
-            _text = text;
-            _bufferStartTag = new StringBuilder();
-            _bufferEndTag = new StringBuilder();
-            _nextState = ParserState.NonComment;
-        }
-
-        internal BfCommand ParseNextCommand()
+        internal static BfCommand ParseNextCommand(TextReader text, ref int loops)
         {
             int nextChar;
             BfCommand cmd;
 
             while (true)
             {
-                nextChar = _text.Read();
+                nextChar = text.Read();
 
                 if (nextChar != Eof)
                 {
-                    if (IsWithinComment(nextChar))
-                    {
-                        continue;
-                    }
-
                     if (IsBrainfuckCommand(nextChar, out cmd))
                     {
+                        cmd.ChangeLoopsRef(ref loops);
                         return cmd;
                     }
 
                     continue;
                 }
 
-                return BfCommand.EndOfFile;
+                return BfCommand.Eof;
             }
-        }
-
-        private bool IsWithinComment(int nextChar)
-        {
-            if (_comment is null)
-            {
-                return false;
-            }
-
-            var ch = (char) nextChar;
-
-            switch (_nextState)
-            {
-                case ParserState.NonComment:
-                    if (ch == _comment.StartTag[0])
-                    {
-                        _bufferStartTag.Append(ch);
-                        _nextState = string.Equals(_comment.StartTag, _bufferStartTag.ToString())
-                            ? ParserState.CommentBody
-                            : ParserState.OpeningComment;
-                    }
-                    break;
-
-                case ParserState.OpeningComment:
-                    _bufferStartTag.Append(ch);
-                    if (string.Equals(_comment.StartTag, _bufferStartTag.ToString()))
-                    {
-                        _bufferStartTag.Clear();
-                        _nextState = ParserState.CommentBody;
-                    }
-                    break;
-
-                case ParserState.CommentBody:
-                    if (ch == _comment.EndTag[0])
-                    {
-                        _bufferEndTag.Append(ch);
-                        _nextState = string.Equals(_comment.EndTag, _bufferEndTag.ToString())
-                            ? ParserState.NonComment
-                            : ParserState.ClosingComment;
-                    }
-                    break;
-
-                case ParserState.ClosingComment:
-                    _bufferEndTag.Append(ch);
-                    if (string.Equals(_comment.EndTag, _bufferEndTag.ToString()))
-                    {
-                        _bufferEndTag.Clear();
-                        _nextState = ParserState.NonComment;
-                    }
-                    break;
-            }
-
-            return _nextState == ParserState.OpeningComment ||
-                   _nextState == ParserState.CommentBody ||
-                   _nextState == ParserState.ClosingComment;
         }
     }
 }

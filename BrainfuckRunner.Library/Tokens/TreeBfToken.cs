@@ -29,12 +29,7 @@ namespace BrainfuckRunner.Library.Tokens
         /// </summary>
         protected List<BfToken> EnsureChildren()
         {
-            if (_children is null)
-            {
-                _children = new List<BfToken>();
-            }
-
-            return _children;
+            return _children ??= new List<BfToken>();
         }
 
         /// <summary>
@@ -44,7 +39,7 @@ namespace BrainfuckRunner.Library.Tokens
         {
             get
             {
-                if (_children is null)
+                if (_children == null)
                 {
                     return NoChildren;
                 }

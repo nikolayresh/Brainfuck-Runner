@@ -8,7 +8,7 @@
         /// <summary>
         /// Pseudo Brainfuck command that defines state when end of file or text resource reached
         /// </summary>
-        EndOfFile = -1,
+        Eof = -1,
 
         /// <summary>
         /// Pseudo Brainfuck command that defines initial state

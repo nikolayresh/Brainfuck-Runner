@@ -15,11 +15,9 @@ namespace BrainfuckRunner.Library
                 case BfCommand.Decrement:
                     value = change ? (value - 1) : -1;
                     return true;
-
                 case BfCommand.Increment:
                     value = change ? (value + 1) : 1;
                     return true;
-
                 default:
                     return false;
             }
@@ -33,11 +31,9 @@ namespace BrainfuckRunner.Library
                 case BfCommand.MoveBackward:
                     delta = change ? (delta - 1) : -1;
                     return true;
-
                 case BfCommand.MoveForward:
                     delta = change ? (delta + 1) : 1;
                     return true;
-
                 default:
                     return false;
             }
@@ -55,7 +51,6 @@ namespace BrainfuckRunner.Library
                 case BfCommand.MoveBackward:
                 case BfCommand.MoveForward:
                     return true;
-
                 default:
                     return false;
             }
@@ -75,13 +70,12 @@ namespace BrainfuckRunner.Library
                 case BfCommand.Decrement:
                 case BfCommand.Increment:
                     return true;
-
                 default:
                     return false;
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsLoopCmd(this BfCommand cmd)
         {
             switch (cmd)
@@ -89,16 +83,29 @@ namespace BrainfuckRunner.Library
                 case BfCommand.OpenLoop:
                 case BfCommand.CloseLoop:
                     return true;
-
                 default:
                     return false;
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static void ChangeLoopsRef(this BfCommand cmd, ref int loops)
+        {
+            switch (cmd)
+            {
+                case BfCommand.OpenLoop:
+                    loops++;
+                    break;
+                case BfCommand.CloseLoop:
+                    loops--;
+                    break;
             }
         }
 
         /// <summary>
         /// Calculates modulo of a specified number with respect to base threshold 
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int Mod(int value, int @base)
         {
             return (@base + (value % @base)) % @base;

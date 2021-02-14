@@ -19,8 +19,6 @@ namespace BrainfuckRunner.Library
 
         public bool UseOptimizedExecutor { get; set; } = true;
 
-        public BfCommentPattern CommentPattern { get; set; }
-
         public TextReader Input { get; set; } = Console.In;
 
         public TextWriter Output { get; set; } = Console.Out;
@@ -74,22 +72,6 @@ namespace BrainfuckRunner.Library
         public BfEngineOptions WithSimpleExecutor()
         {
             UseOptimizedExecutor = false;
-            return this;
-        }
-
-        public BfEngineOptions WithCommentPattern(BfCommentPattern pattern)
-        {
-            CommentPattern = pattern;
-            return this;
-        }
-
-        public BfEngineOptions WithCommentPattern(string startTag, string endTag)
-        {
-            CommentPattern = new BfCommentPattern
-            {
-                StartTag = startTag,
-                EndTag = endTag
-            };
             return this;
         }
 

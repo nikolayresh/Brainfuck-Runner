@@ -19,7 +19,7 @@ namespace BrainfuckRunner.Tests
                 yield break;
             }
 
-            yield return (uint)2; // number 2 - is the first prime number
+            yield return 2; // number 2 - is the first prime number
 
             for (uint number = 3; number <= threshold; number += 2)
             {

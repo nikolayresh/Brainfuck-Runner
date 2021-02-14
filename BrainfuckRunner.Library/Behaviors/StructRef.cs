@@ -6,14 +6,14 @@
     /// <typeparam name="TStruct">Type of structure type</typeparam>
     internal sealed class StructRef<TStruct> where TStruct : struct
     {
-        public StructRef(TStruct valueOnInit)
+        internal StructRef(TStruct valueOnInit)
         {
             Value = valueOnInit;
         }
 
-        public TStruct Value
+        internal TStruct Value
         {
-            get; 
+            get;
             set;
         }
 
