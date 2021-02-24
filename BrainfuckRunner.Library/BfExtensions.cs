@@ -8,15 +8,15 @@ namespace BrainfuckRunner.Library
     internal static class BfExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsCellChanger(this BfCommand cmd, ref int value, bool change)
+        internal static bool IsCellChanger(this BfCommand cmd, ref int value, bool modify)
         {
             switch (cmd)
             {
                 case BfCommand.Decrement:
-                    value = change ? (value - 1) : -1;
+                    value = modify ? (value - 1) : -1;
                     return true;
                 case BfCommand.Increment:
-                    value = change ? (value + 1) : 1;
+                    value = modify ? (value + 1) : 1;
                     return true;
                 default:
                     return false;
@@ -24,15 +24,15 @@ namespace BrainfuckRunner.Library
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsPointerShift(this BfCommand cmd, ref int delta, bool change)
+        internal static bool IsPointerShift(this BfCommand cmd, ref int delta, bool modify)
         {
             switch (cmd)
             {
                 case BfCommand.MoveBackward:
-                    delta = change ? (delta - 1) : -1;
+                    delta = modify ? (delta - 1) : -1;
                     return true;
                 case BfCommand.MoveForward:
-                    delta = change ? (delta + 1) : 1;
+                    delta = modify ? (delta + 1) : 1;
                     return true;
                 default:
                     return false;
@@ -89,7 +89,7 @@ namespace BrainfuckRunner.Library
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static void ChangeLoopsRef(this BfCommand cmd, ref int loops)
+        internal static void TryChangeLoopsRef(this BfCommand cmd, ref int loops)
         {
             switch (cmd)
             {

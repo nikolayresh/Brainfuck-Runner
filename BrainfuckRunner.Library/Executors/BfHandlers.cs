@@ -99,7 +99,6 @@ namespace BrainfuckRunner.Library.Executors
                             case BfCommand.OpenLoop:
                                 loopDepth++;
                                 continue;
-
                             case BfCommand.CloseLoop:
                                 loopDepth--;
                                 continue;
@@ -129,7 +128,6 @@ namespace BrainfuckRunner.Library.Executors
                             case BfCommand.CloseLoop:
                                 loopDepth++;
                                 continue;
-
                             case BfCommand.OpenLoop:
                                 loopDepth--;
                                 continue;
@@ -144,7 +142,7 @@ namespace BrainfuckRunner.Library.Executors
 
         private static void ChangeCell(BfEngine engine, int delta)
         {
-            unchecked
+            checked
             {
                 var (ptr, cells) = engine.GetPointerCellsTuple();
                 var ret = cells[ptr] + delta;

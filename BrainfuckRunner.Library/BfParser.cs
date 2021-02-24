@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace BrainfuckRunner.Library
@@ -80,7 +79,7 @@ namespace BrainfuckRunner.Library
                 {
                     if (IsBrainfuckCommand(nextChar, out cmd))
                     {
-                        cmd.ChangeLoopsRef(ref loops);
+                        cmd.TryChangeLoopsRef(ref loops);
                         return cmd;
                     }
 
