@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - main
+      - master
       - QuickFixes/**
 
 jobs:
@@ -27,6 +28,9 @@ jobs:
       
      - name: Build
        run: dotnet build --configuration Release --no-restore
+       
+     - name: Show Tests to Run
+       run: dotnet test --list-tests
       
-     - name: Test
-       run: dotnet test --configuration Release
+     - name: Run Tests
+       run: dotnet test --configuration Release --verbosity detailed
