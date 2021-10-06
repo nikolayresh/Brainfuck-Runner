@@ -33,6 +33,7 @@
     <None Remove="CodeFiles/PrimeNumbers.bf" />
     <None Remove="CodeFiles\BenchOne.bf" />
     <None Remove="CodeFiles\BenchTwo.bf" />
+    <None Remove="CodeFiles\quine.bf" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,6 +50,7 @@
     <EmbeddedResource Include="CodeFiles\Long.bf" />
     <EmbeddedResource Include="CodeFiles\Mandel.bf" />
     <EmbeddedResource Include="CodeFiles\PrimeNumbers.bf" />
+    <EmbeddedResource Include="CodeFiles\quine.bf" />
   </ItemGroup>
 
   <ItemGroup>

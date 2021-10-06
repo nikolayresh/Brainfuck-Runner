@@ -367,6 +367,38 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
+        [Fact(DisplayName = "Quine")]
+        [Trait("Is optimized", "No")]
+        public void execute_Quine()
+        {
+            var sw = new StringWriter();
+            var engine = new BfEngine(new BfEngineOptions()
+                .WithOutput(sw)
+                .WithSimpleExecutor());
+
+            var elapsed = engine.Execute(OpenText("quine.bf"));
+            var output = sw.ToString();
+
+            Assert.Equal("->++>+++>+>+>+++>>>>>>>>>>>>>>>>>>>>>>+>+>++>+++>++>>+++>+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>+>+>>+++>>>>+++>>>+++>+>>>>>>>++>+++>+++>+>>+++>+++>+>+++>+>+++>+>++>+++>>>+>+>+>+>++>+++>+>+>>+++>>>>>>>+>+>>>+>+>++>+++>+++>+>>+++>+++>+>+++>+>++>+++>++>>+>+>++>+++>+>+>>+++>>>+++>+>>>++>+++>+++>+>>+++>>>+++>+>+++>+>>+++>>+++>>+[[>>+[>]+>+[<]<-]>>[>]<+<+++[<]<<+]>>>[>]+++>+[+[<++++++++++++++++>-]<++++++++++.<]", output);
+            _output.WriteLine($"Time taken to execute: {elapsed:c}");
+        }
+
+        [Fact(DisplayName = "Quine (optimized)")]
+        [Trait("Is optimized", "Yes")]
+        public void execute_optimized_Quine()
+        {
+            var sw = new StringWriter();
+            var engine = new BfEngine(new BfEngineOptions()
+                .WithOutput(sw)
+                .WithOptimizedExecutor());
+
+            var elapsed = engine.Execute(OpenText("quine.bf"));
+            var output = sw.ToString();
+
+            Assert.Equal("->++>+++>+>+>+++>>>>>>>>>>>>>>>>>>>>>>+>+>++>+++>++>>+++>+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>+>+>>+++>>>>+++>>>+++>+>>>>>>>++>+++>+++>+>>+++>+++>+>+++>+>+++>+>++>+++>>>+>+>+>+>++>+++>+>+>>+++>>>>>>>+>+>>>+>+>++>+++>+++>+>>+++>+++>+>+++>+>++>+++>++>>+>+>++>+++>+>+>>+++>>>+++>+>>>++>+++>+++>+>>+++>>>+++>+>+++>+>>+++>>+++>>+[[>>+[>]+>+[<]<-]>>[>]<+<+++[<]<<+]>>>[>]+++>+[+[<++++++++++++++++>-]<++++++++++.<]", output);
+            _output.WriteLine($"Time taken to execute: {elapsed:c}");
+        }
+
         [Theory(DisplayName = "Calculate factors of a number")]
         [InlineData(5)]
         [InlineData(10)]
