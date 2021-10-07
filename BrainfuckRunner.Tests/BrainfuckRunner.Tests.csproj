@@ -11,9 +11,9 @@
     <Authors>Nikolay Reshetinsky</Authors>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageTags>brainfuck, interpreter, brainfuck-interpreter, brainfuck-parser</PackageTags>
-    <Version>1.0.10</Version>
-    <AssemblyVersion>1.0.10</AssemblyVersion>
-    <FileVersion>1.0.10</FileVersion>
+    <Version>1.0.11</Version>
+    <AssemblyVersion>1.0.11</AssemblyVersion>
+    <FileVersion>1.0.11</FileVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Company>Nikolay Reshetinsky (777nickresh@gmail.com)</Company>
