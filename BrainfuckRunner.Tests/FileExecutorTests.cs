@@ -502,10 +502,8 @@ namespace BrainfuckRunner.Tests
 
         [Theory(DisplayName = "List of prime numbers up to specified threshold")]
         [Trait("Is optimized", "No")]
-        [InlineData(5)]
-        [InlineData(50)]
+        [InlineData(10)]
         [InlineData(100)]
-        [InlineData(150)]
         [InlineData(200)]
         [InlineData(250)]
         public void execute_Prime_Numbers(uint threshold)
@@ -537,10 +535,8 @@ namespace BrainfuckRunner.Tests
 
         [Theory(DisplayName = "List of prime numbers up to specified threshold (optimized)")]
         [Trait("Is optimized", "Yes")]
-        [InlineData(5)]
-        [InlineData(50)]
+        [InlineData(10)]
         [InlineData(100)]
-        [InlineData(150)]
         [InlineData(200)]
         [InlineData(250)]
         public void execute_optimized_Prime_Numbers(uint threshold)
