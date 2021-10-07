@@ -1,4 +1,4 @@
-name: Build
+name: Sonnar Scanner
 on:
   push:
     branches:
@@ -8,7 +8,7 @@ on:
     types: [opened, synchronize, reopened]
 jobs:
   build:
-    name: Build
+    name: Build & Scan
     runs-on: windows-latest
     steps:
       - name: Set up JDK 11
