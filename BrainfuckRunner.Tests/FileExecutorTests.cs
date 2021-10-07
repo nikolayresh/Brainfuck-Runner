@@ -365,7 +365,6 @@ namespace BrainfuckRunner.Tests
         [Trait("Is optimized", "Yes")]
         public void execute_optimized_99_Bottles_Of_Beer()
         {
-            StringWriter sw = new StringWriter();
             BfEngine engine = new BfEngine(new BfEngineOptions()
                 .WithOptimizedExecutor()
                 .WithPresetCommentToken());
@@ -500,77 +499,10 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Theory(DisplayName = "List of prime numbers up to specified threshold")]
-        [Trait("Is optimized", "No")]
-        [InlineData(10)]
-        [InlineData(100)]
-        [InlineData(200)]
-        [InlineData(250)]
-        public void execute_Prime_Numbers(uint threshold)
-        {
-            StringReader sr = new StringReader(threshold.ToString());
-            StringWriter sw = new StringWriter();
-            BfEngine engine = new BfEngine(new BfEngineOptions()
-                .WithInput(sr)
-                .WithOutput(sw)
-                .WithSimpleExecutor());
-
-            TimeSpan elapsed = engine.Execute(OpenText("PrimeNumbers.bf"));
-            string output = sw.ToString();
-            string[] parts = output.Split(':');
-
-            Assert.True(parts.Length == 2);
-            Assert.Equal("Primes up to", parts[0]);
-
-            List<uint> primes = parts[1].Trim()
-                .Split((char)32)
-                .Select(uint.Parse)
-                .ToList();
-
-            List<uint> expectedPrimes = Calculation.EnumeratePrimesUpTo(threshold).ToList();
-            Assert.Equal(expectedPrimes, primes);
-
-            _output.WriteLine($"Time taken to execute: {elapsed:c}");
-        }
-
-        [Theory(DisplayName = "List of prime numbers up to specified threshold (optimized)")]
-        [Trait("Is optimized", "Yes")]
-        [InlineData(10)]
-        [InlineData(100)]
-        [InlineData(200)]
-        [InlineData(250)]
-        public void execute_optimized_Prime_Numbers(uint threshold)
-        {
-            StringReader sr = new StringReader(threshold.ToString());
-            StringWriter sw = new StringWriter();
-            BfEngine engine = new BfEngine(new BfEngineOptions()
-                .WithInput(sr)
-                .WithOutput(sw)
-                .WithOptimizedExecutor());
-
-            TimeSpan elapsed = engine.Execute(OpenText("PrimeNumbers.bf"));
-            string output = sw.ToString();
-            string[] parts = output.Split(':');
-
-            Assert.True(parts.Length == 2);
-            Assert.Equal("Primes up to", parts[0]);
-
-            List<uint> primes = parts[1].Trim()
-                .Split((char)32)
-                .Select(uint.Parse)
-                .ToList();
-
-            List<uint> expectedPrimes = Calculation.EnumeratePrimesUpTo(threshold).ToList();
-            Assert.Equal(expectedPrimes, primes);
-
-            _output.WriteLine($"Time taken to execute: {elapsed:c}");
-        }
-
         private static TextReader OpenText(string file)
         {
-            string path = string.Concat("BrainfuckRunner.Tests.CodeFiles.", file);
-            Stream stream = typeof(FileExecutorTests).Assembly.GetManifestResourceStream(path);
-            return new StreamReader(stream);
+            string path = Path.Combine("CodeFiles", file);
+            return File.OpenText(path);
         }
     }
 }

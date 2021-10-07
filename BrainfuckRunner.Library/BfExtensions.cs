@@ -7,7 +7,7 @@ namespace BrainfuckRunner.Library
     /// </summary>
     internal static class BfExtensions
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsCellChanger(this BfCommand cmd, ref int value, bool modify)
         {
             switch (cmd)
@@ -25,7 +25,7 @@ namespace BrainfuckRunner.Library
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsPointerShift(this BfCommand cmd, ref int delta, bool modify)
         {
             switch (cmd)
@@ -47,7 +47,7 @@ namespace BrainfuckRunner.Library
         /// Returns a boolean value whether specified Brainfuck command
         /// is a pointer-shift command
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsPointerShift(this BfCommand cmd)
         {
             switch (cmd)
@@ -65,8 +65,8 @@ namespace BrainfuckRunner.Library
         /// Returns a boolean value whether specified Brainfuck command
         /// makes up a correct multiply-loop construction 
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        internal static bool IsMultiplyLoopCmd(this BfCommand cmd)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool IsMultiplyLoopCommand(this BfCommand cmd)
         {
             switch (cmd)
             {
@@ -81,7 +81,7 @@ namespace BrainfuckRunner.Library
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsLoopCmd(this BfCommand cmd)
         {
             switch (cmd)
@@ -95,7 +95,7 @@ namespace BrainfuckRunner.Library
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool TryChangeLoopsRef(this BfCommand cmd, ref int loops)
         {
             switch (cmd)
@@ -116,7 +116,7 @@ namespace BrainfuckRunner.Library
         /// <summary>
         /// Calculates modulo of a specified number with respect to base threshold 
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static int Mod(int value, int @base)
         {
             return (@base + (value % @base)) % @base;

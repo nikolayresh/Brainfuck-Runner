@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using BrainfuckRunner.Library.Behaviors;
 
 namespace BrainfuckRunner.Library.Executors
@@ -89,7 +88,6 @@ namespace BrainfuckRunner.Library.Executors
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         private void SetPointerPosition(ref int iNextCmd)
         {
             switch (Engine.OnMemoryOverflow)
@@ -178,7 +176,6 @@ namespace BrainfuckRunner.Library.Executors
             iNextCmd = iCmd;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         private void ChangeCell(ref int iNextCmd)
         {
             switch (Engine.OnCellOverflow)
@@ -438,7 +435,6 @@ namespace BrainfuckRunner.Library.Executors
                 ptr + offsets.Max < Engine.TapeSize;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         private byte ApplyDeltaOnCell(byte current, int delta)
         {
             unchecked

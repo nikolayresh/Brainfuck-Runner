@@ -13,10 +13,9 @@ namespace BrainfuckRunner.Library
         /// </summary>
         internal const int Eof = -1;
 
-        internal const int WhiteSpace = (char) 32;
-
         internal const int LineFeed = 10;
         internal const int CarriageReturn = 13;
+        internal const int WhiteSpace = 32;
 
         /// <summary>
         /// All Brainfuck commands placed into set
@@ -59,7 +58,7 @@ namespace BrainfuckRunner.Library
         /// Returns a boolean value whether specified character
         /// is a valid Brainfuck command
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsBrainfuckCommand(int arg, out BfCommand cmd)
         {
             cmd = BfCommand.Unknown;

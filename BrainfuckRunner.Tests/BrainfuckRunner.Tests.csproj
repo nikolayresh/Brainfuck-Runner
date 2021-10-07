@@ -30,27 +30,51 @@
     <None Remove="CodeFiles/LetterA.bf" />
     <None Remove="CodeFiles/long.bf" />
     <None Remove="CodeFiles/Mandel.bf" />
-    <None Remove="CodeFiles/PrimeNumbers.bf" />
     <None Remove="CodeFiles\BenchOne.bf" />
     <None Remove="CodeFiles\BenchTwo.bf" />
     <None Remove="CodeFiles\quine.bf" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="CodeFiles\99_Bottles_Of_Beer.bf" />
-    <EmbeddedResource Include="CodeFiles\Alphabet.bf" />
-    <EmbeddedResource Include="CodeFiles\BenchOne.bf" />
-    <EmbeddedResource Include="CodeFiles\BenchTwo.bf" />
-    <EmbeddedResource Include="CodeFiles\BusyBeaver.bf" />
-    <EmbeddedResource Include="CodeFiles\DisplayAscii.bf" />
-    <EmbeddedResource Include="CodeFiles\Factor.bf" />
-    <EmbeddedResource Include="CodeFiles\Hanoi.bf" />
-    <EmbeddedResource Include="CodeFiles\HelloWorld.bf" />
-    <EmbeddedResource Include="CodeFiles\LetterA.bf" />
-    <EmbeddedResource Include="CodeFiles\Long.bf" />
-    <EmbeddedResource Include="CodeFiles\Mandel.bf" />
-    <EmbeddedResource Include="CodeFiles\PrimeNumbers.bf" />
-    <EmbeddedResource Include="CodeFiles\quine.bf" />
+    <Content Include="CodeFiles\99_Bottles_Of_Beer.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\Alphabet.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\BenchOne.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\BenchTwo.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\BusyBeaver.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\DisplayAscii.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\Factor.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\Hanoi.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\HelloWorld.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\LetterA.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\Long.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\Mandel.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="CodeFiles\quine.bf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

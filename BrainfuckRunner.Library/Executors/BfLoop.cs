@@ -31,9 +31,7 @@ namespace BrainfuckRunner.Library.Executors
         /// </summary>
         internal int StartPosition
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
             get => _startPos;
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
             set => _startPos = value;
         }
 
@@ -42,9 +40,7 @@ namespace BrainfuckRunner.Library.Executors
         /// </summary>
         internal int EndPosition
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
             get => _endPos;
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
             set => _endPos = value;
         }
 
@@ -55,9 +51,7 @@ namespace BrainfuckRunner.Library.Executors
         /// </summary>
         internal bool? ZeroState
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
             get => _zeroState;
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
             set => _zeroState = value;
         }
 
@@ -66,9 +60,7 @@ namespace BrainfuckRunner.Library.Executors
         /// </summary>
         internal int? ScanStep
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
             get => _scanStep;
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
             set => _scanStep = value;
         }
 
@@ -78,9 +70,7 @@ namespace BrainfuckRunner.Library.Executors
         /// </summary>
         internal BfLoopOffsets Offsets
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
             get => _offsets;
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
             set => _offsets = value;
         }
 
@@ -89,7 +79,6 @@ namespace BrainfuckRunner.Library.Executors
         /// </summary>
         internal int ContentLength
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
             get => _endPos - _startPos - 1;
         }
 
@@ -99,7 +88,6 @@ namespace BrainfuckRunner.Library.Executors
         /// </summary>
         internal bool IsEmpty
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
             get => (_endPos - _startPos) == 1;
         }
 
@@ -108,9 +96,7 @@ namespace BrainfuckRunner.Library.Executors
         /// </summary>
         internal int SubLoops
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
             get => _subLoops;
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
             set => _subLoops = value;
         }
     }

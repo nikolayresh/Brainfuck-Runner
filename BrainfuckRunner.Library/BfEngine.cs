@@ -218,8 +218,10 @@ namespace BrainfuckRunner.Library
         /// </summary>
         public TextWriter Output
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-            get => _output;
+            get
+            {
+                return _output;
+            }
         }
 
         /// <summary>
@@ -227,8 +229,10 @@ namespace BrainfuckRunner.Library
         /// </summary>
         public TextReader Input
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-            get => _input;
+            get
+            {
+                return _input;
+            }
         }
 
         /// <summary>
@@ -236,8 +240,11 @@ namespace BrainfuckRunner.Library
         /// </summary>
         public BfCellOverflowBehavior OnCellOverflow
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-            get => _onCellOverflow;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return _onCellOverflow;
+            }
         }
 
         /// <summary>
@@ -246,8 +253,11 @@ namespace BrainfuckRunner.Library
         /// </summary>
         public BfMemoryOverflowBehavior OnMemoryOverflow
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-            get => _onMemoryOverflow;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return _onMemoryOverflow;
+            }
         }
 
         /// <summary>
@@ -256,10 +266,17 @@ namespace BrainfuckRunner.Library
         /// </summary>
         public int Pointer
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-            get => _ptr;
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-            internal set => _ptr = value;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return _ptr;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            internal set
+            {
+                _ptr = value;
+            }
         }
 
         /// <summary>
@@ -267,8 +284,11 @@ namespace BrainfuckRunner.Library
         /// </summary>
         public int TapeSize
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-            get => _cells.Length;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return _cells.Length;
+            }
         }
 
         /// <summary>
@@ -337,16 +357,17 @@ namespace BrainfuckRunner.Library
         /// </summary>
         public bool IsOptimized
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => _isOptimized;
+            get
+            {
+                return _isOptimized;
+            }
         }
 
         private void ReadBrainfuckCommands(TextReader text)
         {
+            BfParser parser = new BfParser(text, _commentTokens);
             int loops = 0;
             BfCommand cmd;
-
-            BfParser parser = new BfParser(text, _commentTokens);
 
             while ((cmd = parser.ParseNextCommand()) != BfCommand.Eof)
             {
@@ -403,8 +424,11 @@ namespace BrainfuckRunner.Library
         /// </summary>
         internal byte[] Cells
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-            get => _cells;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return _cells;
+            }
         }
 
         /// <summary>
@@ -412,15 +436,18 @@ namespace BrainfuckRunner.Library
         /// </summary>
         internal List<BfCommand> Commands
         {
-            [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-            get => _commands;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return _commands;
+            }
         }
 
         /// <summary>
         /// Returns current position of a pointer along with recently parsed Brainfuck commands
         /// and size of tape as a single method call
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal (int Pointer, List<BfCommand> Commands, int TapeSize) GetBaseTuple()
         {
             return (_ptr, _commands, _cells.Length);
@@ -430,7 +457,7 @@ namespace BrainfuckRunner.Library
         /// Returns current position of a pointer along with recently parsed commands and tape of cells
         /// as a single method call
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal (int Pointer, List<BfCommand> Commands, byte[] Cells) GetCellsTuple()
         {
             return (_ptr, _commands, _cells);
@@ -439,7 +466,7 @@ namespace BrainfuckRunner.Library
         /// <summary>
         /// Returns current position of a pointer along with tape of cells
         /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal (int Pointer, byte[] Cells) GetPointerCellsTuple()
         {
             return (_ptr, _cells);

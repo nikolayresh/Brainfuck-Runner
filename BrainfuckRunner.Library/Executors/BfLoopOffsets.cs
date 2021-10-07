@@ -21,7 +21,7 @@ namespace BrainfuckRunner.Library.Executors
         {
             BfCommand[] commands = BfLoop.GetLoopCommands(loop, engine);
 
-            if (commands.Length == 0 || commands.Any(x => !x.IsMultiplyLoopCmd()))
+            if (commands.Length == 0 || commands.Any(x => !x.IsMultiplyLoopCommand()))
             {
                 return false;
             }
