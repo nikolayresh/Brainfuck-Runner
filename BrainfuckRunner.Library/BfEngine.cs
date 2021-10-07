@@ -365,9 +365,9 @@ namespace BrainfuckRunner.Library
 
         private void ReadBrainfuckCommands(TextReader text)
         {
-            BfParser parser = new BfParser(text, _commentTokens);
             int loops = 0;
             BfCommand cmd;
+            BfParser parser = new BfParser(text, _commentTokens);
 
             while ((cmd = parser.ParseNextCommand()) != BfCommand.Eof)
             {

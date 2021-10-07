@@ -22,7 +22,7 @@ namespace BrainfuckRunner.Library.Executors
                  {
                     Command = cmd, 
                     Position = pos
-                 }).Where(x => x.Command.IsLoopCmd());
+                 }).Where(x => x.Command.IsLoopCommand());
 
             foreach (var loopCmd in loopCommands)
             {

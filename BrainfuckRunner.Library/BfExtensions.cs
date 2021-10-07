@@ -82,7 +82,7 @@ namespace BrainfuckRunner.Library
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsLoopCmd(this BfCommand cmd)
+        internal static bool IsLoopCommand(this BfCommand cmd)
         {
             switch (cmd)
             {
@@ -106,7 +106,7 @@ namespace BrainfuckRunner.Library
 
                 case BfCommand.CloseLoop:
                     loops--;
-                    return false;
+                    return true;
 
                 default:
                     return false;

@@ -80,12 +80,14 @@ namespace BrainfuckRunner.Library
             return cmd != BfCommand.Unknown;
         }
 
-        private void SkipWhiteSpace()
+        private bool SkipWhiteSpace()
         {
             while (_text.Peek() == WhiteSpace)
             {
                 _text.Read();
             }
+
+            return _text.Peek() != Eof;
         }
 
         private bool TryForNewLine()
@@ -112,10 +114,8 @@ namespace BrainfuckRunner.Library
         {
             bool withinComment = false;
 
-            while (_text.Peek() != Eof)
+            while (_text.Peek() != Eof && SkipWhiteSpace())
             {
-                SkipWhiteSpace();
-
                 if (!withinComment)
                 {
                     if (IsBrainfuckCommand(_text.Peek(), out BfCommand cmd))
