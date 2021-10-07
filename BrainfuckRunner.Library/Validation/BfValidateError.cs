@@ -1,4 +1,4 @@
-﻿#pragma warning disable 659
+﻿using System;
 
 namespace BrainfuckRunner.Library.Validation
 {
@@ -12,8 +12,8 @@ namespace BrainfuckRunner.Library.Validation
         /// </summary>
         public BfValidateErrorCode Code
         {
-            get; 
-            internal set;
+            get;
+            internal init;
         }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace BrainfuckRunner.Library.Validation
         public string Content
         {
             get; 
-            internal set;
+            internal init;
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace BrainfuckRunner.Library.Validation
         public int Position
         {
             get; 
-            internal set;
+            internal init;
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace BrainfuckRunner.Library.Validation
         public int Length
         {
             get; 
-            internal set;
+            internal init;
         }
 
         public override bool Equals(object obj)
@@ -61,6 +61,11 @@ namespace BrainfuckRunner.Library.Validation
                    && string.Equals(Content, other.Content)
                    && Position == other.Position
                    && Length == other.Length;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Code, Content, Position, Length);
         }
 
         public override string ToString()
