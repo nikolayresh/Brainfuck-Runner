@@ -45,7 +45,7 @@ namespace BrainfuckRunner.Library.Tokens
         {
             get
             {
-                var length = 1;
+                int length = 1;
 
                 length += Children.Sum(x => x.Length);
 

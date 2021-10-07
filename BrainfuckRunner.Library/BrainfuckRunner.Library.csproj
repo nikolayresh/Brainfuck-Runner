@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <PackageProjectUrl>https://github.com/nikolayresh/Brainfuck-Runner</PackageProjectUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -10,10 +10,10 @@
     <RepositoryType>Library</RepositoryType>
     <RepositoryUrl>https://github.com/nikolayresh/Brainfuck-Runner.git</RepositoryUrl>
     <PackageTags>brainfuck, brainfuck interpreter, interpreter, brainfuck tokenizer, brainfuck validator</PackageTags>
-    <AssemblyVersion>1.0.9</AssemblyVersion>
-    <FileVersion>1.0.9</FileVersion>
+    <AssemblyVersion>1.0.10</AssemblyVersion>
+    <FileVersion>1.0.10</FileVersion>
     <Description>Powerful Brainfuck language interpreter along with ability to tokenize &amp; validate the Brainfuck code</Description>
-    <Version>1.0.9</Version>
+    <Version>1.0.10</Version>
     <PackageId>Brainfuck-Runner</PackageId>
     <Product>Brainfuck Runner</Product>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

@@ -19,7 +19,7 @@ namespace BrainfuckRunner.Library.Executors
 
         private bool InitializeOffsetsMap(BfLoop loop, BfEngine engine, ref int minOffset, ref int maxOffset)
         {
-            var commands = BfLoop.GetLoopCommands(loop, engine);
+            BfCommand[] commands = BfLoop.GetLoopCommands(loop, engine);
 
             if (commands.Length == 0 || commands.Any(x => !x.IsMultiplyLoopCmd()))
             {
@@ -27,11 +27,11 @@ namespace BrainfuckRunner.Library.Executors
             }
 
             Map[0] = new StructRef<int>(0);
-            var ptr = 0;
+            int ptr = 0;
 
-            foreach (var cmd in commands)
+            foreach (BfCommand cmd in commands)
             {
-                var ptrDelta = 0;
+                int ptrDelta = 0;
                 if (cmd.IsPointerShift(ref ptrDelta, false))
                 {
                     ptr += ptrDelta;
@@ -50,7 +50,7 @@ namespace BrainfuckRunner.Library.Executors
                     continue;
                 }
 
-                if (!Map.TryGetValue(ptr, out var delta))
+                if (!Map.TryGetValue(ptr, out StructRef<int> delta))
                 {
                     delta = new StructRef<int>(0);
                     Map[ptr] = delta;
@@ -69,7 +69,7 @@ namespace BrainfuckRunner.Library.Executors
 
             bool baseCellWillTurnZero()
             {
-                var baseDelta = Map[0].Value;
+                int baseDelta = Map[0].Value;
                 return baseDelta == -1 || (engine.OnCellOverflow == BfCellOverflowBehavior.ApplyOverflow && baseDelta == 1);
             }
 

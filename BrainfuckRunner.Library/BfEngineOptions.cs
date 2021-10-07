@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using BrainfuckRunner.Library.Behaviors;
 using Microsoft.Extensions.Options;
@@ -15,17 +16,24 @@ namespace BrainfuckRunner.Library
         /// </summary>
         public const int PresetTapeSize = 30_000;
 
-        public int TapeSize { get; set; } = PresetTapeSize;
+        /// <summary>
+        /// By default, a '#' character will be used to mark comment lines
+        /// </summary>
+        public const char PresetCommentToken = '#';
 
-        public bool UseOptimizedExecutor { get; set; } = true;
+        internal HashSet<char> CommentTokens { get; private set; }
 
-        public TextReader Input { get; set; } = Console.In;
+        internal int TapeSize { get; private set; } = PresetTapeSize;
 
-        public TextWriter Output { get; set; } = Console.Out;
+        internal bool UseOptimizedExecutor { get; private set; } = true;
 
-        public BfMemoryOverflowBehavior OnMemoryOverflow { get; set; } = BfMemoryOverflowBehavior.ThrowError;
+        internal TextReader Input { get; private set; } = Console.In;
 
-        public BfCellOverflowBehavior OnCellOverflow { get; set; } = BfCellOverflowBehavior.ApplyOverflow;
+        internal TextWriter Output { get; private set; } = Console.Out;
+
+        internal BfMemoryOverflowBehavior OnMemoryOverflow { get; private set; } = BfMemoryOverflowBehavior.ThrowError;
+
+        internal BfCellOverflowBehavior OnCellOverflow { get; private set; } = BfCellOverflowBehavior.ApplyOverflow;
 
         public BfEngineOptions WithTapeSize(int size)
         {
@@ -72,6 +80,43 @@ namespace BrainfuckRunner.Library
         public BfEngineOptions WithSimpleExecutor()
         {
             UseOptimizedExecutor = false;
+            return this;
+        }
+
+        public BfEngineOptions WithCellOverflow(BfCellOverflowBehavior behavior)
+        {
+            OnCellOverflow = behavior;
+            return this;
+        }
+
+        public BfEngineOptions WithMemoryOverflow(BfMemoryOverflowBehavior behavior)
+        {
+            OnMemoryOverflow = behavior;
+            return this;
+        }
+
+        public BfEngineOptions WithDefaultCellOverflow()
+        {
+            OnCellOverflow = BfCellOverflowBehavior.ApplyOverflow;
+            return this;
+        }
+
+        public BfEngineOptions WithDefaultMemoryOverflow()
+        {
+            OnMemoryOverflow = BfMemoryOverflowBehavior.ThrowError;
+            return this;
+        }
+
+        public BfEngineOptions WithCommentToken(char token)
+        {
+            (CommentTokens ??= new HashSet<char>()).Add(token);
+            return this;
+        }
+
+        public BfEngineOptions WithPresetCommentToken()
+        {
+            (CommentTokens ??= new HashSet<char>()).Clear();
+            CommentTokens.Add(PresetCommentToken);
             return this;
         }
 

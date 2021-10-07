@@ -1,14 +1,22 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace BrainfuckRunner.Library
 {
-    internal static class BfParser
+    internal sealed class BfParser
     {
         /// <summary>
         /// Defines state when end of file reached
         /// </summary>
         internal const int Eof = -1;
+
+        internal const int WhiteSpace = (char) 32;
+
+        internal const int LineFeed = 10;
+        internal const int CarriageReturn = 13;
 
         /// <summary>
         /// All Brainfuck commands placed into set
@@ -38,14 +46,24 @@ namespace BrainfuckRunner.Library
                 .ToString();
         }
 
+        private readonly TextReader _text;
+        private readonly char[] _commentTokens;
+
+        internal BfParser(TextReader text, char[] commentTokens)
+        {
+            _text = text;
+            _commentTokens = commentTokens;
+        }
+
         /// <summary>
         /// Returns a boolean value whether specified character
         /// is a valid Brainfuck command
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         internal static bool IsBrainfuckCommand(int arg, out BfCommand cmd)
         {
             cmd = BfCommand.Unknown;
-            var ch = (char) arg;
+            char ch = (char) arg;
 
             cmd = ch switch
             {
@@ -63,31 +81,60 @@ namespace BrainfuckRunner.Library
             return cmd != BfCommand.Unknown;
         }
 
+        private void SkipWhiteSpace()
+        {
+            while (_text.Peek() == WhiteSpace)
+            {
+                _text.Read();
+            }
+        }
+
+        private bool NewLineReached()
+        {
+            int character = _text.Read();
+
+            if (character is CarriageReturn or LineFeed)
+            {
+                if (OperatingSystem.IsWindows() && character is CarriageReturn && _text.Peek() is LineFeed)
+                {
+                    _text.Read();
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Returns a next parsed Brainfuck command
         /// </summary>
-        internal static BfCommand ParseNextCommand(TextReader text, ref int loops)
+        internal BfCommand ParseNextCommand()
         {
-            int nextChar;
-            BfCommand cmd;
+            bool isCommentLine = false;
 
-            while (true)
+            while (_text.Peek() != Eof)
             {
-                nextChar = text.Read();
+                SkipWhiteSpace();
 
-                if (nextChar != Eof)
+                if (!isCommentLine)
                 {
-                    if (IsBrainfuckCommand(nextChar, out cmd))
+                    if (IsBrainfuckCommand(_text.Peek(), out BfCommand cmd))
                     {
-                        cmd.TryChangeLoopsRef(ref loops);
+                        _text.Read();
                         return cmd;
                     }
 
-                    continue;
+                    isCommentLine = _commentTokens != null && _commentTokens.Any(ch => ch == (char) _text.Peek());
+                    _text.Read();
                 }
-
-                return BfCommand.Eof;
+                else
+                {
+                    isCommentLine = !NewLineReached();
+                }
             }
+
+            return BfCommand.Eof;
         }
     }
 }

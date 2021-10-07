@@ -24,19 +24,19 @@ namespace BrainfuckRunner.Library
 
         internal static BfValidateResult Validate(char[] code, BfValidateTolerance tolerance)
         {
-            var result = new BfValidateResult();
+            BfValidateResult result = new BfValidateResult();
 
-            var plainText = new StringBuilder();
-            var openedLoops = new Stack<BfLoop>();
+            StringBuilder plainText = new StringBuilder();
+            Stack<BfLoop> openedLoops = new Stack<BfLoop>();
 
-            var errors = result.GetErrorsList();
-            var i = 0;
+            SortedSet<BfValidateError> errors = result.GetErrorsList();
+            int i = 0;
 
             for (; i < code.Length; i++)
             {
-                var ch = code[i];
+                char ch = code[i];
 
-                if (!BfParser.IsBrainfuckCommand(ch, out var cmd))
+                if (!BfParser.IsBrainfuckCommand(ch, out BfCommand cmd))
                 {
                     plainText.Append(ch);
                     continue;
@@ -117,7 +117,7 @@ namespace BrainfuckRunner.Library
             if (!tolerance.HasFlag(BfValidateTolerance.ToNonBrainfuckContent))
             {
                 // no tolerance to non-Brainfuck content
-                var matches = Regex.Matches(content, 
+                MatchCollection matches = Regex.Matches(content, 
                     $"[^\r\n {EscapedCommandSet}]+", RegexOptions.Compiled);
 
                 foreach (Match match in matches)
@@ -135,7 +135,7 @@ namespace BrainfuckRunner.Library
             if (!tolerance.HasFlag(BfValidateTolerance.ToWhiteSpaceContent))
             {
                 // no tolerance to whitespace
-                var matches = Regex.Matches(content, "[ ]+", RegexOptions.Compiled);
+                MatchCollection matches = Regex.Matches(content, "[ ]+", RegexOptions.Compiled);
 
                 foreach (Match match in matches)
                 {
@@ -152,7 +152,7 @@ namespace BrainfuckRunner.Library
             if (!tolerance.HasFlag(BfValidateTolerance.ToNewLines))
             {
 	            // no tolerance to new lines
-	            var matches = Regex.Matches(content, "[\r\n]+", RegexOptions.Compiled);
+	            MatchCollection matches = Regex.Matches(content, "[\r\n]+", RegexOptions.Compiled);
 
 	            foreach (Match match in matches)
 	            {

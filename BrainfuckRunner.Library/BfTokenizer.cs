@@ -11,25 +11,25 @@ namespace BrainfuckRunner.Library
     { 
         internal static RootBfToken Tokenize(char[] code)
         {
-            var root = new RootBfToken();
+            RootBfToken root = new RootBfToken();
 
-            var stack = new Stack<TreeBfToken>();
-            var plainText = new StringBuilder();
-            var i = 0;
+            Stack<TreeBfToken> stack = new Stack<TreeBfToken>();
+            StringBuilder plainText = new StringBuilder();
+            int i = 0;
 
             stack.Push(root);
 
             for (; i < code.Length; i++)
             {
-                var ch = code[i];
+                char ch = code[i];
 
-                if (!BfParser.IsBrainfuckCommand(ch, out var cmd))
+                if (!BfParser.IsBrainfuckCommand(ch, out BfCommand cmd))
                 {
                     plainText.Append(ch);
                     continue;
                 }
 
-                var parent = stack.Peek();
+                TreeBfToken parent = stack.Peek();
 
                 if (plainText.Length > 0)
                 {
@@ -42,7 +42,7 @@ namespace BrainfuckRunner.Library
                     plainText.Clear();
                 }
 
-                var token = BfToken.FromBrainfuckCommand(cmd, i);
+                BfToken token = BfToken.FromBrainfuckCommand(cmd, i);
                 parent.AcceptChild(token);
 
                 switch (cmd)
@@ -59,7 +59,7 @@ namespace BrainfuckRunner.Library
 
             if (plainText.Length > 0)
             {
-                var parent = stack.Peek();
+                TreeBfToken parent = stack.Peek();
 
                 parent.AcceptChild(new PlainTextBfToken
                 {

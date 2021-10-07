@@ -16,7 +16,7 @@ namespace BrainfuckRunner.Library.Executors
 
         internal override void Initialize()
         {
-            var loopsTree = new Stack<BfLoop>();
+            Stack<BfLoop> loopsTree = new Stack<BfLoop>();
             var loopCommands = Engine.Commands
                 .Select((cmd, pos) => new
                  {
@@ -29,7 +29,7 @@ namespace BrainfuckRunner.Library.Executors
                 switch (loopCmd.Command)
                 {
                     case BfCommand.OpenLoop:
-                        if (loopsTree.TryPeek(out var parent))
+                        if (loopsTree.TryPeek(out BfLoop parent))
                         {
                             parent.SubLoops++;
                         }
@@ -48,7 +48,7 @@ namespace BrainfuckRunner.Library.Executors
                         continue;
 
                     case BfCommand.CloseLoop:
-                        var loop = loopsTree.Pop();
+                        BfLoop loop = loopsTree.Pop();
                         loop.EndPosition = loopCmd.Position;
                         _loopsCache[loopCmd.Position] = loop;
                         continue;
@@ -108,10 +108,10 @@ namespace BrainfuckRunner.Library.Executors
 
         private void SetPointerWithDefaultBehavior(ref int iNextCmd)
         {
-            var (ptr, commands, tapeSize) = Engine.GetBaseTuple();
-            var iCmd = iNextCmd;
-            var delta = 0;
-            var isOutOfRange = false;
+            (int ptr, List<BfCommand> commands, int tapeSize) = Engine.GetBaseTuple();
+            int iCmd = iNextCmd;
+            int delta = 0;
+            bool isOutOfRange = false;
 
             while (iCmd < commands.Count && commands[iCmd].IsPointerShift(ref delta, false))
             {
@@ -138,9 +138,9 @@ namespace BrainfuckRunner.Library.Executors
 
         private void SetPointerWithThresholdBehavior(ref int iNextCmd)
         {
-            var (ptr, commands, tapeSize) = Engine.GetBaseTuple();
-            var iCmd = iNextCmd;
-            var delta = 0;
+            (int ptr, List<BfCommand> commands, int tapeSize) = Engine.GetBaseTuple();
+            int iCmd = iNextCmd;
+            int delta = 0;
 
             while (iCmd < commands.Count && commands[iCmd].IsPointerShift(ref delta, false))
             {
@@ -161,9 +161,9 @@ namespace BrainfuckRunner.Library.Executors
 
         private void SetPointerWithOverflowBehavior(ref int iNextCmd)
         {
-            var (ptr, commands, tapeSize) = Engine.GetBaseTuple();
-            var iCmd = iNextCmd;
-            var delta = 0;
+            (int ptr, List<BfCommand> commands, int tapeSize) = Engine.GetBaseTuple();
+            int iCmd = iNextCmd;
+            int delta = 0;
 
             while (iCmd < commands.Count && commands[iCmd].IsPointerShift(ref delta, true))
             {
@@ -192,9 +192,9 @@ namespace BrainfuckRunner.Library.Executors
 
         private void ChangeCellWithOverflowBehavior(ref int iNextCmd)
         {
-            var (ptr, commands, cells) = Engine.GetCellsTuple();
-            var iCmd = iNextCmd;
-            var delta = 0;
+            (int ptr, List<BfCommand> commands, byte[] cells) = Engine.GetCellsTuple();
+            int iCmd = iNextCmd;
+            int delta = 0;
 
             while (iCmd < commands.Count && commands[iCmd].IsCellChanger(ref delta, true))
             {
@@ -207,10 +207,10 @@ namespace BrainfuckRunner.Library.Executors
 
         private void ChangeCellWithThresholdBehavior(ref int iNextCmd)
         {
-            var ptrValue = (int) Engine.Cells[Engine.Pointer];
-            var commands = Engine.Commands;
-            var iCmd = iNextCmd;
-            var delta = 0;
+            int ptrValue = (int) Engine.Cells[Engine.Pointer];
+            List<BfCommand> commands = Engine.Commands;
+            int iCmd = iNextCmd;
+            int delta = 0;
 
             while (iCmd < commands.Count && commands[iCmd].IsCellChanger(ref delta, false))
             {
@@ -231,16 +231,16 @@ namespace BrainfuckRunner.Library.Executors
 
         private void PrintCell(ref int iNextCmd)
         {
-            var ch = (char) Engine.Cells[Engine.Pointer];
-            var commands = Engine.Commands;
-            var iCmd = iNextCmd;
+            char ch = (char) Engine.Cells[Engine.Pointer];
+            List<BfCommand> commands = Engine.Commands;
+            int iCmd = iNextCmd;
 
             while (iCmd < commands.Count && commands[iCmd] == BfCommand.Print)
             {
                 iCmd++;
             }
 
-            var times = iCmd - iNextCmd;
+            int times = iCmd - iNextCmd;
             iNextCmd = iCmd;
 
             while (times-- != 0)
@@ -251,8 +251,8 @@ namespace BrainfuckRunner.Library.Executors
 
         private void OnLoopOpening(ref int iNextCmd)
         {
-            var ptrValue = Engine.Cells[Engine.Pointer];
-            var loop = _loopsCache[iNextCmd];
+            byte ptrValue = Engine.Cells[Engine.Pointer];
+            BfLoop loop = _loopsCache[iNextCmd];
 
             if (ptrValue == 0)
             {
@@ -269,14 +269,14 @@ namespace BrainfuckRunner.Library.Executors
                     return;
                 }
 
-                if (IsScanLoop(loop, out var ptr))
+                if (IsScanLoop(loop, out int ptr))
                 {
                     Engine.Pointer = ptr;
                     iNextCmd = loop.EndPosition + 1;
                     return;
                 }
 
-                if (IsMultiplyLoop(loop, out var offsets))
+                if (IsMultiplyLoop(loop, out BfLoopOffsets offsets))
                 {
                     MultiplyLoopAction(offsets);
                     iNextCmd = loop.EndPosition + 1;
@@ -289,15 +289,15 @@ namespace BrainfuckRunner.Library.Executors
 
         private void MultiplyLoopAction(BfLoopOffsets offsets)
         {
-            var (ptr, cells) = Engine.GetPointerCellsTuple();
-            var map = offsets.Map;
+            (int ptr, byte[] cells) = Engine.GetPointerCellsTuple();
+            Dictionary<int, StructRef<int>> map = offsets.Map;
 
             while (cells[ptr] != 0)
             {
-                foreach (var offset in map.Keys)
+                foreach (int offset in map.Keys)
                 {
-                    var delta = map[offset].Value;
-                    var pos = ptr + offset;
+                    int delta = map[offset].Value;
+                    int pos = ptr + offset;
                     cells[pos] = ApplyDeltaOnCell(cells[pos], delta);
                 }
             }
@@ -315,8 +315,8 @@ namespace BrainfuckRunner.Library.Executors
 
             if (loop.ScanStep == null)
             {
-                var commands = Engine.Commands;
-                var iCmd = loop.StartPosition + 1;
+                List<BfCommand> commands = Engine.Commands;
+                int iCmd = loop.StartPosition + 1;
                 BfCommand cmd;
 
                 if (loop.IsEmpty || !(cmd = commands[iCmd]).IsPointerShift())
@@ -327,7 +327,7 @@ namespace BrainfuckRunner.Library.Executors
                     return false;
                 }
 
-                var posEnd = loop.EndPosition;
+                int posEnd = loop.EndPosition;
                 iCmd++;
 
                 if (iCmd != posEnd)
@@ -349,8 +349,8 @@ namespace BrainfuckRunner.Library.Executors
                 loop.ScanStep = loop.ContentLength * (cmd == BfCommand.MoveBackward ? -1 : 1);
             }
 
-            var cells = Engine.Cells;
-            var step = Math.Abs(loop.ScanStep.Value);
+            byte[] cells = Engine.Cells;
+            int step = Math.Abs(loop.ScanStep.Value);
 
             if (loop.ScanStep < 0)
             {
@@ -388,10 +388,10 @@ namespace BrainfuckRunner.Library.Executors
                 return loop.ZeroState.Value;
             }
 
-            var commands = Engine.Commands;
-            var iCmd = loop.StartPosition + 1;
-            var posEnd = loop.EndPosition;
-            var delta = 0;
+            List<BfCommand> commands = Engine.Commands;
+            int iCmd = loop.StartPosition + 1;
+            int posEnd = loop.EndPosition;
+            int delta = 0;
 
             while (iCmd < posEnd && commands[iCmd].IsCellChanger(ref delta, true))
             {
@@ -405,11 +405,11 @@ namespace BrainfuckRunner.Library.Executors
 
         private void OnLoopClosing(ref int iNextCmd)
         {
-            var ptrValue = Engine.Cells[Engine.Pointer];
+            byte ptrValue = Engine.Cells[Engine.Pointer];
 
             if (ptrValue != 0)
             {
-                var loop = _loopsCache[iNextCmd];
+                BfLoop loop = _loopsCache[iNextCmd];
                 iNextCmd = loop.StartPosition + 1;
             } else
             {
@@ -419,7 +419,7 @@ namespace BrainfuckRunner.Library.Executors
 
         private void ReadIntoCell(ref int iNextCmd)
         {
-            var nextChar = Engine.Input.Read();
+            int nextChar = Engine.Input.Read();
             Engine.Cells[Engine.Pointer] = (byte) nextChar;
             iNextCmd++;
         }
@@ -427,7 +427,7 @@ namespace BrainfuckRunner.Library.Executors
         private bool IsMultiplyLoop(BfLoop loop, out BfLoopOffsets offsets)
         {
             offsets = loop.Offsets ?? (loop.Offsets = new BfLoopOffsets(loop, Engine));
-            var ptr = Engine.Pointer;
+            int ptr = Engine.Pointer;
 
             return
                 offsets.IsCopyPattern &&
@@ -439,7 +439,7 @@ namespace BrainfuckRunner.Library.Executors
         {
             unchecked
             {
-                var ret = current + delta;
+                int ret = current + delta;
 
                 if (ret >= byte.MinValue && ret <= byte.MaxValue)
                 {

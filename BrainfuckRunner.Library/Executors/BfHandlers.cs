@@ -1,4 +1,5 @@
-﻿using BrainfuckRunner.Library.Behaviors;
+﻿using System.Collections.Generic;
+using BrainfuckRunner.Library.Behaviors;
 
 namespace BrainfuckRunner.Library.Executors
 {
@@ -69,26 +70,26 @@ namespace BrainfuckRunner.Library.Executors
 
             OnReadIntoCell = (BfEngine engine, ref int iNextCmd) =>
             {
-                var nextChar = engine.Input.Read();
+                int nextChar = engine.Input.Read();
                 engine.Cells[engine.Pointer] = (byte) nextChar;
                 iNextCmd++;
             };
 
             OnPrintCell = (BfEngine engine, ref int iNextCmd) =>
             {
-                var ch = (char) engine.Cells[engine.Pointer];
+                char ch = (char) engine.Cells[engine.Pointer];
                 engine.Output.Write(ch);
                 iNextCmd++;
             };
 
             OnOpenLoop = (BfEngine engine, ref int iNextCmd) =>
             {
-                var ptrValue = engine.Cells[engine.Pointer];
+                byte ptrValue = engine.Cells[engine.Pointer];
 
                 if (ptrValue == 0)
                 {
-                    var commands = engine.Commands;
-                    var loopDepth = 1;
+                    List<BfCommand> commands = engine.Commands;
+                    int loopDepth = 1;
 
                     while (loopDepth != 0)
                     {
@@ -112,12 +113,12 @@ namespace BrainfuckRunner.Library.Executors
 
             OnCloseLoop = (BfEngine engine, ref int iNextCmd) =>
             {
-                var ptrValue = engine.Cells[engine.Pointer];
+                byte ptrValue = engine.Cells[engine.Pointer];
 
                 if (ptrValue != 0)
                 {
-                    var commands = engine.Commands;
-                    var loopDepth = 1;
+                    List<BfCommand> commands = engine.Commands;
+                    int loopDepth = 1;
 
                     while (loopDepth != 0)
                     {
@@ -144,8 +145,8 @@ namespace BrainfuckRunner.Library.Executors
         {
             checked
             {
-                var (ptr, cells) = engine.GetPointerCellsTuple();
-                var ret = cells[ptr] + delta;
+                (int ptr, byte[] cells) = engine.GetPointerCellsTuple();
+                int ret = cells[ptr] + delta;
 
                 if (ret >= byte.MinValue && ret <= byte.MaxValue)
                 {
