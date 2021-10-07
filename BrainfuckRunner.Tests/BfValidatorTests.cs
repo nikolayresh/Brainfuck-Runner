@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using BrainfuckRunner.Library;
+﻿using BrainfuckRunner.Library;
 using BrainfuckRunner.Library.Validation;
 using Xunit;
 

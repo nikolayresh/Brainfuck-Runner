@@ -96,17 +96,20 @@ namespace BrainfuckRunner.Library
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        internal static void TryChangeLoopsRef(this BfCommand cmd, ref int loops)
+        internal static bool TryChangeLoopsRef(this BfCommand cmd, ref int loops)
         {
             switch (cmd)
             {
                 case BfCommand.OpenLoop:
                     loops++;
-                    break;
+                    return true;
 
                 case BfCommand.CloseLoop:
                     loops--;
-                    break;
+                    return false;
+
+                default:
+                    return false;
             }
         }
 
