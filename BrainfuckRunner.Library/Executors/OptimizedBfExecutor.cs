@@ -210,7 +210,7 @@ namespace BrainfuckRunner.Library.Executors
 
         private void ChangeCellWithThresholdBehavior(ref int iNextCmd)
         {
-            int ptrValue = (int) Engine.Cells[Engine.Pointer];
+            int ptrValue = Engine.Cells[Engine.Pointer];
             List<BfCommand> commands = Engine.Commands;
             int iCmd = iNextCmd;
             int delta = 0;
@@ -445,7 +445,7 @@ namespace BrainfuckRunner.Library.Executors
             {
                 int ret = current + delta;
 
-                if (ret >= byte.MinValue && ret <= byte.MaxValue)
+                if (ret is >= byte.MinValue and <= byte.MaxValue)
                 {
                     return (byte) ret;
                 }

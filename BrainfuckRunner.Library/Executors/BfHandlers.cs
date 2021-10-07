@@ -100,6 +100,7 @@ namespace BrainfuckRunner.Library.Executors
                             case BfCommand.OpenLoop:
                                 loopDepth++;
                                 continue;
+
                             case BfCommand.CloseLoop:
                                 loopDepth--;
                                 continue;
@@ -129,6 +130,7 @@ namespace BrainfuckRunner.Library.Executors
                             case BfCommand.CloseLoop:
                                 loopDepth++;
                                 continue;
+
                             case BfCommand.OpenLoop:
                                 loopDepth--;
                                 continue;
@@ -148,7 +150,7 @@ namespace BrainfuckRunner.Library.Executors
                 (int ptr, byte[] cells) = engine.GetPointerCellsTuple();
                 int ret = cells[ptr] + delta;
 
-                if (ret >= byte.MinValue && ret <= byte.MaxValue)
+                if (ret is >= byte.MinValue and <= byte.MaxValue)
                 {
                     cells[ptr] = (byte) ret;
                     return;
