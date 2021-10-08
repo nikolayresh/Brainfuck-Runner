@@ -29,7 +29,7 @@ namespace BrainfuckRunner.Library
             StringBuilder plainText = new StringBuilder();
             Stack<BfLoop> openedLoops = new Stack<BfLoop>();
 
-            SortedSet<BfValidateError> errors = result.GetErrorsList();
+            SortedSet<BfValidateError> errors = result.GetErrorSet();
             int i = 0;
 
             for (; i < code.Length; i++)

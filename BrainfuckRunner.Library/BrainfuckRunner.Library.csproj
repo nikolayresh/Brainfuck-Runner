@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0</TargetFrameworks>
+    <TargetFramework>net5.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <PackageProjectUrl>https://github.com/nikolayresh/Brainfuck-Runner</PackageProjectUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -10,24 +10,25 @@
     <RepositoryType>Library</RepositoryType>
     <RepositoryUrl>https://github.com/nikolayresh/Brainfuck-Runner.git</RepositoryUrl>
     <PackageTags>brainfuck, brainfuck interpreter, interpreter, brainfuck tokenizer, brainfuck validator</PackageTags>
-    <AssemblyVersion>1.0.11</AssemblyVersion>
-    <FileVersion>1.0.11</FileVersion>
+    <AssemblyVersion>1.0.12</AssemblyVersion>
+    <FileVersion>1.0.12</FileVersion>
     <Description>Powerful Brainfuck language interpreter along with ability to tokenize &amp; validate the Brainfuck code</Description>
-    <Version>1.0.11</Version>
+    <Version>1.0.12</Version>
     <PackageId>Brainfuck-Runner</PackageId>
     <Product>Brainfuck Runner</Product>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Company>Nikolay Reshetinsky (777nickresh@gmail.com)</Company>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0|AnyCPU'">
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0|AnyCPU'">
     <Optimize>true</Optimize>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>

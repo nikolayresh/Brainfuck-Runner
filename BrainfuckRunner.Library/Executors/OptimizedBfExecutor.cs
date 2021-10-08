@@ -7,11 +7,17 @@ namespace BrainfuckRunner.Library.Executors
 {
     internal sealed class OptimizedBfExecutor : BfExecutor
     {
+        private delegate void OptimizedHandler(ref int iNextCmd);
+
         private readonly Dictionary<int, BfLoop> _loopsCache;
+        private readonly OptimizedHandler _onSetPointerPosition;
+        private readonly OptimizedHandler _onChangeCell;
 
         internal OptimizedBfExecutor(BfEngine engine) : base(engine)
         {
             _loopsCache = new Dictionary<int, BfLoop>();
+            _onSetPointerPosition = ResolveHandlerOnSetPointerPosition(engine);
+            _onChangeCell = ResolveHandlerOnChangeCell(engine);
         }
 
         internal override void Initialize()
@@ -62,12 +68,12 @@ namespace BrainfuckRunner.Library.Executors
             {
                 case BfCommand.MoveBackward:
                 case BfCommand.MoveForward:
-                    SetPointerPosition(ref iNextCmd);
+                    _onSetPointerPosition(ref iNextCmd);
                     break;
 
                 case BfCommand.Decrement:
                 case BfCommand.Increment:
-                    ChangeCell(ref iNextCmd);
+                    _onChangeCell(ref iNextCmd);
                     break;
 
                 case BfCommand.Read:
@@ -88,32 +94,39 @@ namespace BrainfuckRunner.Library.Executors
             }
         }
 
-        private void SetPointerPosition(ref int iNextCmd)
+        private OptimizedHandler ResolveHandlerOnSetPointerPosition(BfEngine engine)
         {
-            switch (Engine.OnMemoryOverflow)
+            return engine.OnMemoryOverflow switch
             {
-                case BfMemoryOverflowBehavior.ThrowError:
-                    SetPointerWithDefaultBehavior(ref iNextCmd);
-                    break;
+                BfMemoryOverflowBehavior.ThrowError => SetPointerWithDefaultBehavior,
+                BfMemoryOverflowBehavior.ApplyOverflow => SetPointerWithOverflowBehavior,
+                BfMemoryOverflowBehavior.MovePointerToThreshold => SetPointerWithThresholdBehavior,
+                _ => throw new ArgumentException(
+                    $"Failed to resolve a callback function for specified behavior: {engine.OnMemoryOverflow:G}", 
+                    nameof(engine.OnMemoryOverflow))
+            };
+        }
 
-                case BfMemoryOverflowBehavior.ApplyOverflow:
-                    SetPointerWithOverflowBehavior(ref iNextCmd);
-                    break;
-
-                case BfMemoryOverflowBehavior.MovePointerToThreshold:
-                    SetPointerWithThresholdBehavior(ref iNextCmd);
-                    break;
-            }
+        private OptimizedHandler ResolveHandlerOnChangeCell(BfEngine engine)
+        {
+            return engine.OnCellOverflow switch
+            {
+                BfCellOverflowBehavior.ApplyOverflow => ChangeCellWithOverflowBehavior,
+                BfCellOverflowBehavior.SetThresholdValue => ChangeCellWithThresholdBehavior,
+                _ => throw new ArgumentException(
+                     $"Failed to resolve a callback function for specified behavior: {engine.OnCellOverflow:G}",
+                     nameof(engine.OnCellOverflow))
+            };
         }
 
         private void SetPointerWithDefaultBehavior(ref int iNextCmd)
         {
-            (int ptr, List<BfCommand> commands, int tapeSize) = Engine.GetBaseTuple();
+            (int ptr, BfCommand[] commands, int tapeSize) = Engine.GetBaseTuple();
             int iCmd = iNextCmd;
             int delta = 0;
             bool isOutOfRange = false;
 
-            while (iCmd < commands.Count && commands[iCmd].IsPointerShift(ref delta, false))
+            while (iCmd < commands.Length && commands[iCmd].IsPointerShift(ref delta, false))
             {
                 ptr += delta;
                 iCmd++;
@@ -138,11 +151,11 @@ namespace BrainfuckRunner.Library.Executors
 
         private void SetPointerWithThresholdBehavior(ref int iNextCmd)
         {
-            (int ptr, List<BfCommand> commands, int tapeSize) = Engine.GetBaseTuple();
+            (int ptr, BfCommand[] commands, int tapeSize) = Engine.GetBaseTuple();
             int iCmd = iNextCmd;
             int delta = 0;
 
-            while (iCmd < commands.Count && commands[iCmd].IsPointerShift(ref delta, false))
+            while (iCmd < commands.Length && commands[iCmd].IsPointerShift(ref delta, false))
             {
                 ptr += delta;
                 iCmd++;
@@ -161,11 +174,11 @@ namespace BrainfuckRunner.Library.Executors
 
         private void SetPointerWithOverflowBehavior(ref int iNextCmd)
         {
-            (int ptr, List<BfCommand> commands, int tapeSize) = Engine.GetBaseTuple();
+            (int ptr, BfCommand[] commands, int tapeSize) = Engine.GetBaseTuple();
             int iCmd = iNextCmd;
             int delta = 0;
 
-            while (iCmd < commands.Count && commands[iCmd].IsPointerShift(ref delta, true))
+            while (iCmd < commands.Length && commands[iCmd].IsPointerShift(ref delta, true))
             {
                 iCmd++;
             }
@@ -176,27 +189,13 @@ namespace BrainfuckRunner.Library.Executors
             iNextCmd = iCmd;
         }
 
-        private void ChangeCell(ref int iNextCmd)
-        {
-            switch (Engine.OnCellOverflow)
-            {
-                case BfCellOverflowBehavior.ApplyOverflow:
-                    ChangeCellWithOverflowBehavior(ref iNextCmd);
-                    break;
-
-                case BfCellOverflowBehavior.SetThresholdValue:
-                    ChangeCellWithThresholdBehavior(ref iNextCmd);
-                    break;
-            }
-        }
-
         private void ChangeCellWithOverflowBehavior(ref int iNextCmd)
         {
-            (int ptr, List<BfCommand> commands, byte[] cells) = Engine.GetCellsTuple();
+            (int ptr, BfCommand[] commands, byte[] cells) = Engine.GetCellsTuple();
             int iCmd = iNextCmd;
             int delta = 0;
 
-            while (iCmd < commands.Count && commands[iCmd].IsCellChanger(ref delta, true))
+            while (iCmd < commands.Length && commands[iCmd].IsCellChanger(ref delta, true))
             {
                 iCmd++;
             }
@@ -208,16 +207,16 @@ namespace BrainfuckRunner.Library.Executors
         private void ChangeCellWithThresholdBehavior(ref int iNextCmd)
         {
             int ptrValue = Engine.Cells[Engine.Pointer];
-            List<BfCommand> commands = Engine.Commands;
+            BfCommand[] commands = Engine.Commands;
             int iCmd = iNextCmd;
             int delta = 0;
 
-            while (iCmd < commands.Count && commands[iCmd].IsCellChanger(ref delta, false))
+            while (iCmd < commands.Length && commands[iCmd].IsCellChanger(ref delta, false))
             {
                 ptrValue += delta;
                 iCmd++;
 
-                if (ptrValue < byte.MinValue || ptrValue > byte.MaxValue)
+                if (ptrValue is < byte.MinValue or > byte.MaxValue)
                 {
                     ptrValue = (ptrValue < byte.MinValue)
                         ? byte.MinValue
@@ -232,10 +231,10 @@ namespace BrainfuckRunner.Library.Executors
         private void PrintCell(ref int iNextCmd)
         {
             char ch = (char) Engine.Cells[Engine.Pointer];
-            List<BfCommand> commands = Engine.Commands;
+            BfCommand[] commands = Engine.Commands;
             int iCmd = iNextCmd;
 
-            while (iCmd < commands.Count && commands[iCmd] == BfCommand.Print)
+            while (iCmd < commands.Length && commands[iCmd] == BfCommand.Print)
             {
                 iCmd++;
             }
@@ -315,7 +314,7 @@ namespace BrainfuckRunner.Library.Executors
 
             if (loop.ScanStep == null)
             {
-                List<BfCommand> commands = Engine.Commands;
+                BfCommand[] commands = Engine.Commands;
                 int iCmd = loop.StartPosition + 1;
                 BfCommand cmd;
 
@@ -388,7 +387,7 @@ namespace BrainfuckRunner.Library.Executors
                 return loop.ZeroState.Value;
             }
 
-            List<BfCommand> commands = Engine.Commands;
+            BfCommand[] commands = Engine.Commands;
             int iCmd = loop.StartPosition + 1;
             int posEnd = loop.EndPosition;
             int delta = 0;

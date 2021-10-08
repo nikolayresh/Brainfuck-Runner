@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0</TargetFrameworks>
+    <TargetFramework>net5.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <ApplicationIcon />
     <OutputType>Library</OutputType>
@@ -11,16 +11,16 @@
     <Authors>Nikolay Reshetinsky</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageTags>brainfuck, interpreter, brainfuck-interpreter, brainfuck-parser</PackageTags>
-    <Version>1.0.11</Version>
-    <AssemblyVersion>1.0.11</AssemblyVersion>
-    <FileVersion>1.0.11</FileVersion>
+    <Version>1.0.12</Version>
+    <AssemblyVersion>1.0.12</AssemblyVersion>
+    <FileVersion>1.0.12</FileVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Company>Nikolay Reshetinsky (777nickresh@gmail.com)</Company>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0|AnyCPU'">
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 

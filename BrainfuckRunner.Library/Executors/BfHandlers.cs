@@ -88,7 +88,7 @@ namespace BrainfuckRunner.Library.Executors
 
                 if (ptrValue == 0)
                 {
-                    List<BfCommand> commands = engine.Commands;
+                    BfCommand[] commands = engine.Commands;
                     int loopDepth = 1;
 
                     while (loopDepth != 0)
@@ -118,7 +118,7 @@ namespace BrainfuckRunner.Library.Executors
 
                 if (ptrValue != 0)
                 {
-                    List<BfCommand> commands = engine.Commands;
+                    BfCommand[] commands = engine.Commands;
                     int loopDepth = 1;
 
                     while (loopDepth != 0)

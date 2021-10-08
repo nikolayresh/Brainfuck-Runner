@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace BrainfuckRunner.Library
 {
@@ -13,14 +12,25 @@ namespace BrainfuckRunner.Library
         /// </summary>
         internal const int Eof = -1;
 
+        /// <summary>
+        /// Defines a line-feed control character, char(10)
+        /// </summary>
         internal const int LineFeed = 10;
+
+        /// <summary>
+        /// Defines a carriage-return control character, char(13)
+        /// </summary>
         internal const int CarriageReturn = 13;
+
+        /// <summary>
+        /// Defines a white-space control character, char(32)
+        /// </summary>
         internal const int WhiteSpace = 32;
 
         /// <summary>
         /// All Brainfuck commands placed into set
         /// </summary>
-        internal static readonly string CommandSet;
+        internal static readonly string CommandSet = $"{MoveBackwardCmd}{MoveForwardCmd}{DecrementCmd}{IncrementCmd}{ReadCmd}{PrintCmd}{OpenLoopCmd}{CloseLoopCmd}";
 
         internal const char MoveBackwardCmd = '<';
         internal const char MoveForwardCmd = '>';
@@ -30,20 +40,6 @@ namespace BrainfuckRunner.Library
         internal const char PrintCmd = '.';
         internal const char OpenLoopCmd = '[';
         internal const char CloseLoopCmd = ']';
-
-        static BfParser()
-        {
-            CommandSet = new StringBuilder()
-                .Append(MoveBackwardCmd)
-                .Append(MoveForwardCmd)
-                .Append(DecrementCmd)
-                .Append(IncrementCmd)
-                .Append(ReadCmd)
-                .Append(PrintCmd)
-                .Append(OpenLoopCmd)
-                .Append(CloseLoopCmd)
-                .ToString();
-        }
 
         private readonly TextReader _text;
         private readonly char[] _commentTokens;

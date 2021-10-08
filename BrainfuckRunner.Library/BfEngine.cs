@@ -182,8 +182,8 @@ namespace BrainfuckRunner.Library
         #endregion
 
         private int _ptr;
+        private BfCommand[] _commands;
         private readonly byte[] _cells;
-        private readonly List<BfCommand> _commands;
         private readonly BfCellOverflowBehavior _onCellOverflow;
         private readonly BfMemoryOverflowBehavior _onMemoryOverflow;
         private readonly bool _isOptimized;
@@ -196,7 +196,6 @@ namespace BrainfuckRunner.Library
             BfEngineOptions options = ValidateOptions(optionsAccessor);
 
             _cells = new byte[options.TapeSize];
-            _commands = new List<BfCommand>();
             _input = options.Input;
             _output = options.Output;
             _isOptimized = options.UseOptimizedExecutor;
@@ -214,10 +213,24 @@ namespace BrainfuckRunner.Library
         }
 
         /// <summary>
+        /// Returns a boolean value whether this engine uses optimized execution logic
+        /// </summary>
+        public bool IsOptimized
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return _isOptimized;
+            }
+        }
+
+
+        /// <summary>
         /// Gets or sets writer to render Brainfuck PRINT commands
         /// </summary>
         public TextWriter Output
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 return _output;
@@ -229,6 +242,7 @@ namespace BrainfuckRunner.Library
         /// </summary>
         public TextReader Input
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 return _input;
@@ -332,48 +346,20 @@ namespace BrainfuckRunner.Library
             }
         }
 
-        /// <summary>
-        /// Gets state of the internal memory tape
-        /// </summary>
-        public byte[] GetCells()
-        {
-            byte[] result = new byte[_cells.Length];
-            Array.Copy(_cells, result, _cells.Length);
-            return result;
-        }
-
-        /// <summary>
-        /// Returns an array of recently parsed Brainfuck commands
-        /// </summary>
-        public BfCommand[] GetCommands()
-        {
-            BfCommand[] result = new BfCommand[_commands.Count];
-            _commands.CopyTo(result);
-            return result;
-        }
-
-        /// <summary>
-        /// Returns a boolean value whether this engine uses optimized execution logic
-        /// </summary>
-        public bool IsOptimized
-        {
-            get
-            {
-                return _isOptimized;
-            }
-        }
-
         private void ReadBrainfuckCommands(TextReader text)
         {
             int loops = 0;
             BfCommand cmd;
             BfParser parser = new BfParser(text, _commentTokens);
+            List<BfCommand> commands = new List<BfCommand>();
 
             while ((cmd = parser.ParseNextCommand()) != BfCommand.Eof)
             {
-                _commands.Add(cmd);
+                commands.Add(cmd);
                 cmd.TryChangeLoopsRef(ref loops);
             }
+
+            _commands = commands.ToArray();
 
             if (loops != 0)
             {
@@ -393,7 +379,7 @@ namespace BrainfuckRunner.Library
         private void Reset()
         {
             _ptr = 0;
-            _commands.Clear();
+            _commands = null;
             Array.Clear(_cells, 0, _cells.Length);
         }
 
@@ -402,16 +388,19 @@ namespace BrainfuckRunner.Library
         /// </summary>
         private TimeSpan ExecuteCore()
         {
-            int iNextCmd = 0;
             BfExecutor executor = BfExecutor.CreateInstance(this);
             executor.Initialize();
 
-            Stopwatch stopwatch = Stopwatch.StartNew();
+            // need local variables here to increase execution speed
             BfCommand cmd;
+            BfCommand[] commands = _commands;
+            int iNextCmd = 0, iEndCmd = commands.Length;
 
-            while (iNextCmd < _commands.Count)
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
+            while (iNextCmd < iEndCmd)
             {
-                cmd = _commands[iNextCmd];
+                cmd = commands[iNextCmd];
                 executor.RunCommand(cmd, ref iNextCmd);
             }
 
@@ -434,7 +423,7 @@ namespace BrainfuckRunner.Library
         /// <summary>
         /// Returns list of parsed Brainfuck commands for internal use
         /// </summary>
-        internal List<BfCommand> Commands
+        internal BfCommand[] Commands
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
@@ -448,7 +437,7 @@ namespace BrainfuckRunner.Library
         /// and size of tape as a single method call
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal (int Pointer, List<BfCommand> Commands, int TapeSize) GetBaseTuple()
+        internal (int Pointer, BfCommand[] Commands, int TapeSize) GetBaseTuple()
         {
             return (_ptr, _commands, _cells.Length);
         }
@@ -458,7 +447,7 @@ namespace BrainfuckRunner.Library
         /// as a single method call
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal (int Pointer, List<BfCommand> Commands, byte[] Cells) GetCellsTuple()
+        internal (int Pointer, BfCommand[] Commands, byte[] Cells) GetCellsTuple()
         {
             return (_ptr, _commands, _cells);
         }

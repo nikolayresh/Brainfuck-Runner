@@ -4,7 +4,7 @@ namespace BrainfuckRunner.Library.Validation
 {
     internal sealed class BfValidateErrorComparer : IComparer<BfValidateError>
     {
-        internal static readonly BfValidateErrorComparer Instance = new BfValidateErrorComparer();
+        internal static readonly BfValidateErrorComparer Instance = new();
 
         /// <summary>
         /// Private constructor for singleton

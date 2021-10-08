@@ -17,7 +17,7 @@ namespace BrainfuckRunner.Tests
             Assert.NotNull(vr);
             Assert.False(vr.IsValid);
 
-            Assert.Collection(vr.Errors,
+            Assert.Collection(vr.GetErrors(),
                 error =>
                 {
                     Assert.Equal(BfValidateErrorCode.NonBrainfuckContent, error.Code);
@@ -79,7 +79,7 @@ namespace BrainfuckRunner.Tests
 
             Assert.NotNull(vr);
             Assert.False(vr.IsValid);
-            Assert.Collection(vr.Errors,
+            Assert.Collection(vr.GetErrors(),
                 error =>
                 {
                     Assert.Equal(BfValidateErrorCode.NonBrainfuckContent, error.Code);
@@ -105,7 +105,7 @@ namespace BrainfuckRunner.Tests
             Assert.NotNull(vr);
             Assert.False(vr.IsValid);
 
-            Assert.Collection(vr.Errors,
+            Assert.Collection(vr.GetErrors(),
                 error =>
                 {
                     Assert.Equal(BfValidateErrorCode.WhiteSpaceContent, error.Code);
@@ -135,7 +135,7 @@ namespace BrainfuckRunner.Tests
             vr = BfEngine.ValidateScript(script, BfValidateTolerance.ToWhiteSpaceContent);
 
             Assert.NotNull(vr);
-            Assert.Empty(vr.Errors);
+            Assert.Empty(vr.GetErrors());
             Assert.True(vr.IsValid);
         }
 
@@ -150,7 +150,7 @@ namespace BrainfuckRunner.Tests
             Assert.NotNull(vr);
             Assert.False(vr.IsValid);
 
-            Assert.Collection(vr.Errors,
+            Assert.Collection(vr.GetErrors(),
                 error =>
                 {
                     Assert.Equal(BfValidateErrorCode.WhiteSpaceContent, error.Code);

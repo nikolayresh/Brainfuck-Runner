@@ -18,7 +18,7 @@ namespace BrainfuckRunner.Library.Validation
         /// <summary>
         /// Gets set of errors for internal use
         /// </summary>
-        internal SortedSet<BfValidateError> GetErrorsList()
+        internal SortedSet<BfValidateError> GetErrorSet()
         {
             return _errors;
         }
@@ -26,12 +26,9 @@ namespace BrainfuckRunner.Library.Validation
         /// <summary>
         /// Gets validation errors
         /// </summary>
-        public BfValidateError[] Errors
+        public BfValidateError[] GetErrors()
         {
-            get
-            {
-                return _errors.ToArray();
-            }
+            return _errors.ToArray();
         }
 
         /// <summary>
