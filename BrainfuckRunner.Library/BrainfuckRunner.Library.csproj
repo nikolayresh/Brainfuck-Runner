@@ -9,7 +9,7 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <RepositoryType>Library</RepositoryType>
     <RepositoryUrl>https://github.com/nikolayresh/Brainfuck-Runner.git</RepositoryUrl>
-    <PackageTags>brainfuck;brainfuck interpreter;brainfuck tokenizer;brainfuck validator;brainfuck engine;brainfuck runner</PackageTags>
+    <PackageTags>brainfuck;brain;brainfuck interpreter;brainfuck tokenizer;brainfuck validator;brainfuck engine;brainfuck runner;text processor</PackageTags>
     <AssemblyVersion>1.0.12</AssemblyVersion>
     <FileVersion>1.0.12</FileVersion>
     <Description>Powerful Brainfuck language interpreter along with ability to tokenize &amp; validate the Brainfuck code</Description>

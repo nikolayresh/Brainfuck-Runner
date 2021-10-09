@@ -160,12 +160,16 @@ namespace BrainfuckRunner.Library
 
             if (options.Input == null)
             {
-                throw new ArgumentNullException(nameof(optionsAccessor));
+                throw new ArgumentException(
+                    "Input is not defined for engine",
+                    nameof(optionsAccessor));
             }
 
             if (options.Output == null)
             {
-                throw new ArgumentNullException(nameof(optionsAccessor));
+                throw new ArgumentException(
+                    "Output is not defined for engine",
+                    nameof(optionsAccessor));
             }
 
             if (options.CommentTokens != null)
@@ -221,7 +225,6 @@ namespace BrainfuckRunner.Library
                 return _isOptimized;
             }
         }
-
 
         /// <summary>
         /// Gets or sets writer to render Brainfuck PRINT commands
