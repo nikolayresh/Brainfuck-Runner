@@ -9,8 +9,8 @@
     <RepositoryUrl></RepositoryUrl>
     <PackageProjectUrl>https://github.com/nikolayresh/Brainfuck-Runner</PackageProjectUrl>
     <Authors>Nikolay Reshetinsky</Authors>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageTags>brainfuck, interpreter, brainfuck-interpreter, brainfuck-parser</PackageTags>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageTags></PackageTags>
     <Version>1.0.12</Version>
     <AssemblyVersion>1.0.12</AssemblyVersion>
     <FileVersion>1.0.12</FileVersion>
@@ -27,6 +27,17 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0|AnyCPU'">
     <Optimize>true</Optimize>
     <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>

@@ -4,12 +4,12 @@
     <TargetFramework>net5.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <PackageProjectUrl>https://github.com/nikolayresh/Brainfuck-Runner</PackageProjectUrl>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>Nikolay Reshetinsky</Authors>
     <NeutralLanguage>en-US</NeutralLanguage>
     <RepositoryType>Library</RepositoryType>
     <RepositoryUrl>https://github.com/nikolayresh/Brainfuck-Runner.git</RepositoryUrl>
-    <PackageTags>brainfuck, brainfuck interpreter, interpreter, brainfuck tokenizer, brainfuck validator</PackageTags>
+    <PackageTags>brainfuck;brainfuck interpreter;brainfuck tokenizer;brainfuck validator;brainfuck engine;brainfuck runner</PackageTags>
     <AssemblyVersion>1.0.12</AssemblyVersion>
     <FileVersion>1.0.12</FileVersion>
     <Description>Powerful Brainfuck language interpreter along with ability to tokenize &amp; validate the Brainfuck code</Description>
@@ -29,6 +29,18 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0|AnyCPU'">
     <Optimize>true</Optimize>
     <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
