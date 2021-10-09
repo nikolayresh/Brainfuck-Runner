@@ -103,7 +103,7 @@ namespace BrainfuckRunner.Library.Executors
                 BfMemoryOverflowBehavior.MovePointerToThreshold => SetPointerWithThresholdBehavior,
                 _ => throw new ArgumentException(
                     $"Failed to resolve a callback function for specified behavior: {engine.OnMemoryOverflow:G}", 
-                    nameof(engine.OnMemoryOverflow))
+                    nameof(engine))
             };
         }
 
@@ -115,7 +115,7 @@ namespace BrainfuckRunner.Library.Executors
                 BfCellOverflowBehavior.SetThresholdValue => ChangeCellWithThresholdBehavior,
                 _ => throw new ArgumentException(
                      $"Failed to resolve a callback function for specified behavior: {engine.OnCellOverflow:G}",
-                     nameof(engine.OnCellOverflow))
+                     nameof(engine))
             };
         }
 

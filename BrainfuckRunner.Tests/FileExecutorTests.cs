@@ -10,6 +10,7 @@ namespace BrainfuckRunner.Tests
 {
     public class FileExecutorTests
     {
+        private const int RunTimeout = 5 * 60 * 1000;
         private readonly ITestOutputHelper _output;
 
         public FileExecutorTests(ITestOutputHelper output)
@@ -17,7 +18,7 @@ namespace BrainfuckRunner.Tests
             _output = output;
         }
 
-        [Fact(DisplayName = "Letter A")]
+        [Fact(DisplayName = "Letter A", Timeout = RunTimeout)]
         [Trait("Is optimized", "No")]
         public void execute_LetterA()
         {
@@ -33,7 +34,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "Letter A (optimized)")]
+        [Fact(DisplayName = "Letter A (optimized)", Timeout = RunTimeout)]
         [Trait("Is optimized", "Yes")]
         public void execute_optimized_LetterA()
         {
@@ -49,7 +50,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "Mandel")]
+        [Fact(DisplayName = "Mandel", Timeout = RunTimeout)]
         [Trait("Is optimized", "No")]
         public void execute_Mandel()
         {
@@ -60,7 +61,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "Mandel (optimized)")]
+        [Fact(DisplayName = "Mandel (optimized)", Timeout = RunTimeout)]
         [Trait("Is optimized", "Yes")]
         public void execute_optimized_Mandel()
         {
@@ -71,7 +72,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "Hello World!")]
+        [Fact(DisplayName = "Hello World!", Timeout = RunTimeout)]
         [Trait("Is optimized", "No")]
         public void execute_HelloWorld()
         {
@@ -87,7 +88,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "Hello World! (optimized)")]
+        [Fact(DisplayName = "Hello World! (optimized)", Timeout = RunTimeout)]
         [Trait("Is optimized", "Yes")]
         public void execute_optimized_HelloWorld()
         {
@@ -103,7 +104,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "Busy Beaver")]
+        [Fact(DisplayName = "Busy Beaver", Timeout = RunTimeout)]
         [Trait("Is optimized", "No")]
         public void execute_BusyBeaver()
         {
@@ -119,7 +120,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "Busy Beaver (optimized)")]
+        [Fact(DisplayName = "Busy Beaver (optimized)", Timeout = RunTimeout)]
         [Trait("Is optimized", "Yes")]
         public void execute_optimized_BusyBeaver()
         {
@@ -135,7 +136,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "Bench 1")]
+        [Fact(DisplayName = "Bench 1", Timeout = RunTimeout)]
         [Trait("Is optimized", "No")]
         public void execute_Bench1()
         {
@@ -151,7 +152,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "Bench 1 (optimized)")]
+        [Fact(DisplayName = "Bench 1 (optimized)", Timeout = RunTimeout)]
         [Trait("Is optimized", "Yes")]
         public void execute_optimized_Bench1()
         {
@@ -167,7 +168,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "Hanoi")]
+        [Fact(DisplayName = "Hanoi", Timeout = RunTimeout)]
         [Trait("Is optimized", "No")]
         public void execute_Hanoi()
         {
@@ -180,7 +181,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "Hanoi (optimized)")]
+        [Fact(DisplayName = "Hanoi (optimized)", Timeout = RunTimeout)]
         [Trait("Is optimized", "Yes")]
         public void execute_optimized_Hanoi()
         {
@@ -193,7 +194,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "Bench 2")]
+        [Fact(DisplayName = "Bench 2", Timeout = RunTimeout)]
         [Trait("Is optimized", "No")]
         public void execute_Bench2()
         {
@@ -217,7 +218,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "Bench 2 (optimized)")]
+        [Fact(DisplayName = "Bench 2 (optimized)", Timeout = RunTimeout)]
         [Trait("Is optimized", "Yes")]
         public void execute_optimized_Bench2()
         {
@@ -241,7 +242,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "Long Running")]
+        [Fact(DisplayName = "Long Running", Timeout = RunTimeout)]
         [Trait("Is optimized", "No")]
         public void execute_LongRunningFile()
         {
@@ -257,7 +258,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "Long Running (optimized)")]
+        [Fact(DisplayName = "Long Running (optimized)", Timeout = RunTimeout)]
         [Trait("Is optimized", "Yes")]
         public void execute_optimized_LongRunningFile()
         {
@@ -273,7 +274,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "Display ASCII")]
+        [Fact(DisplayName = "Display ASCII", Timeout = RunTimeout)]
         [Trait("Is optimized", "No")]
         public void execute_DisplayAscii()
         {
@@ -286,7 +287,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "Display ASCII (optimized)")]
+        [Fact(DisplayName = "Display ASCII (optimized)", Timeout = RunTimeout)]
         [Trait("Is optimized", "Yes")]
         public void execute_optimized_DisplayAscii()
         {
@@ -299,7 +300,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "Alphabet")]
+        [Fact(DisplayName = "Alphabet", Timeout = RunTimeout)]
         [Trait("Is optimized", "No")]
         public void execute_Alphabet()
         {
@@ -323,7 +324,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "Alphabet (optimized)")]
+        [Fact(DisplayName = "Alphabet (optimized)", Timeout = RunTimeout)]
         [Trait("Is optimized", "Yes")]
         public void execute_optimized_Alphabet()
         {
@@ -347,7 +348,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "99 Bottles of Beer")]
+        [Fact(DisplayName = "99 Bottles of Beer", Timeout = RunTimeout)]
         [Trait("Is optimized", "No")]
         public void execute_99_Bottles_Of_Beer()
         {
@@ -361,7 +362,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "99 Bottles of Beer (optimized)")]
+        [Fact(DisplayName = "99 Bottles of Beer (optimized)", Timeout = RunTimeout)]
         [Trait("Is optimized", "Yes")]
         public void execute_optimized_99_Bottles_Of_Beer()
         {
@@ -373,7 +374,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "Quine")]
+        [Fact(DisplayName = "Quine", Timeout = RunTimeout)]
         [Trait("Is optimized", "No")]
         public void execute_Quine()
         {
@@ -390,7 +391,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Fact(DisplayName = "Quine (optimized)")]
+        [Fact(DisplayName = "Quine (optimized)", Timeout = RunTimeout)]
         [Trait("Is optimized", "Yes")]
         public void execute_optimized_Quine()
         {
@@ -407,7 +408,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Theory(DisplayName = "Calculate multipliers/factors of a number")]
+        [Theory(DisplayName = "Calculate multipliers/factors of a number", Timeout = RunTimeout)]
         [InlineData(5)]
         [InlineData(10)]
         [InlineData(15)]
@@ -453,7 +454,7 @@ namespace BrainfuckRunner.Tests
             _output.WriteLine($"Time taken to execute: {elapsed:c}");
         }
 
-        [Theory(DisplayName = "Calculate multipliers/factors of a number (optimized)")]
+        [Theory(DisplayName = "Calculate multipliers/factors of a number (optimized)", Timeout = RunTimeout)]
         [InlineData(5)]
         [InlineData(10)]
         [InlineData(15)]

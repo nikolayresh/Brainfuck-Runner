@@ -128,10 +128,10 @@ namespace BrainfuckRunner.Library
                 throw new ArgumentNullException(nameof(reader));
             }
 
-            int @char;
-            while ((@char = reader.Read()) != BfParser.Eof)
+            int ch;
+            while ((ch = reader.Read()) != BfParser.Eof)
             {
-                yield return (char) @char;
+                yield return (char) ch;
             }
         }
 
@@ -146,34 +146,36 @@ namespace BrainfuckRunner.Library
 
             if (options == null)
             {
-                throw new ArgumentNullException(nameof(optionsAccessor.Value));
+                throw new ArgumentNullException(
+                    nameof(optionsAccessor),
+                    "Value of options is not defined (null)");
             }
 
             if (options.TapeSize <= 0)
             {
                 throw new ArgumentException(
                     "Size of internal memory tape must be a positive integer",
-                    nameof(optionsAccessor.Value.TapeSize));
+                    nameof(optionsAccessor));
             }
 
             if (options.Input == null)
             {
-                throw new ArgumentNullException(nameof(optionsAccessor.Value.Input));
+                throw new ArgumentNullException(nameof(optionsAccessor));
             }
 
             if (options.Output == null)
             {
-                throw new ArgumentNullException(nameof(optionsAccessor.Value.Output));
+                throw new ArgumentNullException(nameof(optionsAccessor));
             }
 
-            if (options.CommentTokens is {Count: > 0})
+            if (options.CommentTokens != null)
             {
                 char[] tokens = options.CommentTokens.ToArray();
                 if (tokens.Any(ch => BfParser.IsBrainfuckCommand(ch, out _)))
                 {
                     throw new ArgumentException(
                         "At least a single comment token is a valid Brainfuck command",
-                        nameof(optionsAccessor.Value.CommentTokens));
+                        nameof(optionsAccessor));
                 }
             } 
 
