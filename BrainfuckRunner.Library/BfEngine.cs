@@ -79,7 +79,7 @@ namespace BrainfuckRunner.Library
         /// </summary>
         public static BfValidateResult ValidateScript(string script, BfValidateTolerance tolerance)
         {
-            using (StringReader sr = new StringReader(script))
+            using (StringReader sr = new(script))
             {
                 return Validate(sr, tolerance);
             }
@@ -112,7 +112,7 @@ namespace BrainfuckRunner.Library
         /// </summary>
         public static BfToken[] TokenizeScript(string script)
         {
-            using (StringReader sr = new StringReader(script))
+            using (StringReader sr = new(script))
             {
                 return Tokenize(sr);
             }
@@ -128,10 +128,10 @@ namespace BrainfuckRunner.Library
                 throw new ArgumentNullException(nameof(reader));
             }
 
-            int nextChar;
-            while ((nextChar = reader.Read()) != BfParser.Eof)
+            int @char;
+            while ((@char = reader.Read()) != BfParser.Eof)
             {
-                yield return (char) nextChar;
+                yield return (char) @char;
             }
         }
 
@@ -189,7 +189,7 @@ namespace BrainfuckRunner.Library
         private readonly bool _isOptimized;
         private readonly TextReader _input;
         private readonly TextWriter _output;
-        private readonly char[] _commentTokens;
+        private readonly HashSet<char> _commentTokens;
 
         public BfEngine(IOptions<BfEngineOptions> optionsAccessor)
         {
@@ -201,11 +201,7 @@ namespace BrainfuckRunner.Library
             _isOptimized = options.UseOptimizedExecutor;
             _onCellOverflow = options.OnCellOverflow;
             _onMemoryOverflow = options.OnMemoryOverflow;
-
-            if (options.CommentTokens is {Count: > 0})
-            {
-                _commentTokens = options.CommentTokens.ToArray();
-            }
+            _commentTokens = options.CommentTokens;
         }
 
         public BfEngine() : this(new BfEngineOptions())
@@ -275,25 +271,6 @@ namespace BrainfuckRunner.Library
         }
 
         /// <summary>
-        /// Gets current position of the memory pointer
-        /// within internal tape
-        /// </summary>
-        public int Pointer
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get
-            {
-                return _ptr;
-            }
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            internal set
-            {
-                _ptr = value;
-            }
-        }
-
-        /// <summary>
         /// Returns size of internal tape
         /// </summary>
         public int TapeSize
@@ -340,7 +317,7 @@ namespace BrainfuckRunner.Library
         /// </summary>
         public TimeSpan ExecuteScript(string script)
         {
-            using (StringReader sr = new StringReader(script))
+            using (StringReader sr = new(script))
             {
                 return Execute(sr);
             }
@@ -359,8 +336,12 @@ namespace BrainfuckRunner.Library
                 cmd.TryChangeLoopsRef(ref loops);
             }
 
+            EnsureLoops(loops);
             _commands = commands.ToArray();
+        }
 
+        private static void EnsureLoops(int loops)
+        {
             if (loops != 0)
             {
                 if (loops > 0)
@@ -391,7 +372,7 @@ namespace BrainfuckRunner.Library
             BfExecutor executor = BfExecutor.CreateInstance(this);
             executor.Initialize();
 
-            // need local variables here to increase execution speed
+            // need local variables here to gain a more robust access to array of Brainfuck command
             BfCommand cmd;
             BfCommand[] commands = _commands;
             int iNextCmd = 0, iEndCmd = commands.Length;
@@ -406,6 +387,25 @@ namespace BrainfuckRunner.Library
 
             stopwatch.Stop();
             return stopwatch.Elapsed;
+        }
+
+        /// <summary>
+        /// Gets current position of the memory pointer
+        /// within internal tape
+        /// </summary>
+        internal int Pointer
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get
+            {
+                return _ptr;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            set
+            {
+                _ptr = value;
+            }
         }
 
         /// <summary>

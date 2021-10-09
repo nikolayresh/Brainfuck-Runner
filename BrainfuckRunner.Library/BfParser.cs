@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace BrainfuckRunner.Library
@@ -42,9 +42,9 @@ namespace BrainfuckRunner.Library
         internal const char CloseLoopCmd = ']';
 
         private readonly TextReader _text;
-        private readonly char[] _commentTokens;
+        private readonly HashSet<char> _commentTokens;
 
-        internal BfParser(TextReader text, char[] commentTokens)
+        internal BfParser(TextReader text, HashSet<char> commentTokens)
         {
             _text = text;
             _commentTokens = commentTokens;
@@ -120,7 +120,7 @@ namespace BrainfuckRunner.Library
                         return cmd;
                     }
 
-                    withinComment = _commentTokens != null && _commentTokens.Any(ch => ch == (char) _text.Peek());
+                    withinComment = _commentTokens != null && _commentTokens.Contains((char) _text.Peek());
                     _text.Read();
                 }
                 else

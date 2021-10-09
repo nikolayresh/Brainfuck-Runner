@@ -2,10 +2,11 @@
 {
     internal sealed class SimpleBfExecutor : BfExecutor
     {
-        private static readonly BfHandlers Handlers = new BfHandlers();
+        private readonly BfSimpleHandlers _handlers;
 
         internal SimpleBfExecutor(BfEngine engine) : base(engine)
         {
+            _handlers = new BfSimpleHandlers(engine);
         }
 
         internal override void RunCommand(BfCommand cmd, ref int iNextCmd)
@@ -13,35 +14,35 @@
             switch (cmd)
             {
                 case BfCommand.MoveBackward:
-                    Handlers.OnMoveBackward(Engine, ref iNextCmd);
+                    _handlers.MoveBackward(ref iNextCmd);
                     break;
 
                 case BfCommand.MoveForward:
-                    Handlers.OnMoveForward(Engine, ref iNextCmd);
+                    _handlers.MoveForward(ref iNextCmd);
                     break;
 
                 case BfCommand.Decrement:
-                    Handlers.OnDecrementCell(Engine, ref iNextCmd);
+                    _handlers.DecrementCell(ref iNextCmd);
                     break;
 
                 case BfCommand.Increment:
-                    Handlers.OnIncrementCell(Engine, ref iNextCmd);
+                    _handlers.IncrementCell(ref iNextCmd);
                     break;
 
                 case BfCommand.Read:
-                    Handlers.OnReadIntoCell(Engine, ref iNextCmd);
+                    _handlers.ReadIntoCell(ref iNextCmd);
                     break;
 
                 case BfCommand.Print:
-                    Handlers.OnPrintCell(Engine, ref iNextCmd);
+                    _handlers.PrintCell(ref iNextCmd);
                     break;
 
                 case BfCommand.OpenLoop:
-                    Handlers.OnOpenLoop(Engine, ref iNextCmd);
+                    _handlers.OpenLoop(ref iNextCmd);
                     break;
 
                 case BfCommand.CloseLoop:
-                    Handlers.OnCloseLoop(Engine, ref iNextCmd);
+                    _handlers.CloseLoop(ref iNextCmd);
                     break;
             }
         }
