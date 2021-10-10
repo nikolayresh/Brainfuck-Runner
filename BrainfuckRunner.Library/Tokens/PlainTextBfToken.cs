@@ -5,13 +5,7 @@ namespace BrainfuckRunner.Library.Tokens
 {
     public sealed class PlainTextBfToken : BfToken
     {
-        private static readonly HashSet<string> NewLineChars;
-
-        static PlainTextBfToken()
-        {
-            NewLineChars = new HashSet<string>(
-                new[]{ "\r\n", "\r", "\n"});
-        }
+        private static readonly HashSet<string> NewLineChars = new(new []{ "\r\n", "\r", "\n"});
 
         private string _text;
 
@@ -24,6 +18,7 @@ namespace BrainfuckRunner.Library.Tokens
             {
                 return _text;
             }
+
             internal set
             {
                 _text = value;
@@ -38,9 +33,7 @@ namespace BrainfuckRunner.Library.Tokens
         {
             get
             {
-                return _text != null
-                       && _text.Length <= 2
-                       && NewLineChars.Contains(_text);
+                return _text is {Length: <= 2} && NewLineChars.Contains(_text);
             }
         }
 
@@ -52,9 +45,7 @@ namespace BrainfuckRunner.Library.Tokens
         {
             get
             {
-                return _text != null && 
-                       _text.Length > 0 && 
-                       _text.All(x => char.IsWhiteSpace(x));
+                return _text is {Length: > 0} && _text.All(char.IsWhiteSpace);
             }
         }
 

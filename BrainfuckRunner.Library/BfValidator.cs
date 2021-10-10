@@ -12,15 +12,9 @@ namespace BrainfuckRunner.Library
     /// </summary>
     internal static class BfValidator
     {
-        private static readonly string EscapedCommandSet;
-
-        static BfValidator()
-        {
-            EscapedCommandSet = string.Concat(
-                BfParser.CommandSet
-                    .Select(cmd => $@"\{cmd}")
-            );
-        }
+        private static readonly string EscapedCommandSet = string.Concat(
+             BfParser.CommandSet
+                 .Select(cmd => $@"\{cmd}"));
 
         internal static BfValidateResult Validate(char[] code, BfValidateTolerance tolerance)
         {

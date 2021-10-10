@@ -297,7 +297,7 @@ namespace BrainfuckRunner.Library
                 throw new ArgumentNullException(nameof(reader));
             }
 
-            Reset();
+            ResetState();
             ReadBrainfuckCommands(reader);
 
             return ExecuteCore();
@@ -310,7 +310,7 @@ namespace BrainfuckRunner.Library
         {
             using (StreamReader sr = File.OpenText(path))
             {
-                Reset();
+                ResetState();
                 ReadBrainfuckCommands(sr);
             }
 
@@ -362,7 +362,7 @@ namespace BrainfuckRunner.Library
             }
         }
 
-        private void Reset()
+        private void ResetState()
         {
             _ptr = 0;
             _commands = null;
@@ -377,9 +377,9 @@ namespace BrainfuckRunner.Library
             BfExecutor executor = BfExecutor.CreateInstance(this);
             executor.Initialize();
 
-            // need local variables here to gain a more robust access to array of Brainfuck command
+            // need local variables here to gain a faster access to all resolved Brainfuck commands
             BfCommand cmd;
-            BfCommand[] commands = _commands;
+            Span<BfCommand> commands = _commands;
             int iNextCmd = 0, iEndCmd = commands.Length;
 
             Stopwatch stopwatch = Stopwatch.StartNew();

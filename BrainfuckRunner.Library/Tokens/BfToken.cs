@@ -6,7 +6,7 @@ namespace BrainfuckRunner.Library.Tokens
     {
         #region === STATIC STUFF & CONSTANTS ===
 
-        private const string @null = "null";
+        private const string Null = "null";
 
         /// <summary>
         /// Creates a token from specified Brainfuck command and its position within code
@@ -93,7 +93,7 @@ namespace BrainfuckRunner.Library.Tokens
             {
                 if (_parent == null)
                 {
-                    return @null;
+                    return Null;
                 }
 
                 return _parent.SysPrefix;

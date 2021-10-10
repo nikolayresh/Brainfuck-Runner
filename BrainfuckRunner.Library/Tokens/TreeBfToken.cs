@@ -5,12 +5,7 @@ namespace BrainfuckRunner.Library.Tokens
 {
     public abstract class TreeBfToken : BfToken
     {
-        private static readonly ReadOnlyCollection<BfToken> NoChildren;
-
-        static TreeBfToken()
-        {
-            NoChildren = new ReadOnlyCollection<BfToken>(new List<BfToken>());
-        }
+        private static readonly ReadOnlyCollection<BfToken> NoChildren = new(new List<BfToken>());
 
         private List<BfToken> _children;
 
