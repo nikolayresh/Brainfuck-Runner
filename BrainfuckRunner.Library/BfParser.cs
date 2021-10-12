@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
 
@@ -41,15 +40,6 @@ namespace BrainfuckRunner.Library
         internal const char OpenLoopCmd = '[';
         internal const char CloseLoopCmd = ']';
 
-        private readonly TextReader _text;
-        private readonly HashSet<char> _commentTokens;
-
-        internal BfParser(TextReader text, HashSet<char> commentTokens)
-        {
-            _text = text;
-            _commentTokens = commentTokens;
-        }
-
         /// <summary>
         /// Returns a boolean value whether specified character
         /// is a valid Brainfuck command
@@ -74,6 +64,49 @@ namespace BrainfuckRunner.Library
             };
 
             return cmd != BfCommand.Unknown;
+        }
+
+        private readonly TextReader _text;
+        private readonly string _commentToken;
+
+        internal BfParser(TextReader text, string commentToken)
+        {
+            _text = text;
+            _commentToken = commentToken;
+        }
+
+        /// <summary>
+        /// Returns a next parsed Brainfuck command
+        /// </summary>
+        internal BfCommand ParseNextCommand()
+        {
+            bool withinComment = false;
+
+            while (_text.Peek() != Eof && SkipWhiteSpace())
+            {
+                if (!withinComment)
+                {
+                    if (IsBrainfuckCommand(_text.Peek(), out BfCommand cmd))
+                    {
+                        _text.Read();
+                        return cmd;
+                    }
+
+                    if (_commentToken != null)
+                    {
+                        withinComment = TryReadCommentToken();
+                        continue;
+                    }
+
+                    _text.Read();
+                }
+                else
+                {
+                    if (TryForNewLine()) withinComment = false;
+                }
+            }
+
+            return BfCommand.Eof;
         }
 
         private bool SkipWhiteSpace()
@@ -103,33 +136,16 @@ namespace BrainfuckRunner.Library
             return false;
         }
 
-        /// <summary>
-        /// Returns a next parsed Brainfuck command
-        /// </summary>
-        internal BfCommand ParseNextCommand()
+        private bool TryReadCommentToken()
         {
-            bool withinComment = false;
-
-            while (_text.Peek() != Eof && SkipWhiteSpace())
+            int i = 0;
+            for (; i < _commentToken.Length; i++)
             {
-                if (!withinComment)
-                {
-                    if (IsBrainfuckCommand(_text.Peek(), out BfCommand cmd))
-                    {
-                        _text.Read();
-                        return cmd;
-                    }
-
-                    withinComment = _commentTokens != null && _commentTokens.Contains((char) _text.Peek());
-                    _text.Read();
-                }
-                else
-                {
-                    if (TryForNewLine()) withinComment = false;
-                }
+                int next = _text.Read();
+                if (next == Eof || _commentToken[i] != (char) next) break;
             }
 
-            return BfCommand.Eof;
+            return i == _commentToken.Length;
         }
     }
 }

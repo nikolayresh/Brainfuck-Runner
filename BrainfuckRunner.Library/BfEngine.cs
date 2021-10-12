@@ -172,9 +172,9 @@ namespace BrainfuckRunner.Library
                     nameof(optionsAccessor));
             }
 
-            if (options.CommentTokens != null)
+            if (options.CommentToken != null)
             {
-                char[] tokens = options.CommentTokens.ToArray();
+                char[] tokens = options.CommentToken.ToArray();
                 if (tokens.Any(ch => BfParser.IsBrainfuckCommand(ch, out _)))
                 {
                     throw new ArgumentException(
@@ -195,7 +195,7 @@ namespace BrainfuckRunner.Library
         private readonly bool _isOptimized;
         private readonly TextReader _input;
         private readonly TextWriter _output;
-        private readonly HashSet<char> _commentTokens;
+        private readonly string _commentToken;
 
         public BfEngine(IOptions<BfEngineOptions> optionsAccessor)
         {
@@ -207,7 +207,7 @@ namespace BrainfuckRunner.Library
             _isOptimized = options.UseOptimizedExecutor;
             _onCellOverflow = options.OnCellOverflow;
             _onMemoryOverflow = options.OnMemoryOverflow;
-            _commentTokens = options.CommentTokens;
+            _commentToken = options.CommentToken;
         }
 
         public BfEngine() : this(new BfEngineOptions())
@@ -332,7 +332,7 @@ namespace BrainfuckRunner.Library
         {
             int loops = 0;
             BfCommand cmd;
-            BfParser parser = new BfParser(text, _commentTokens);
+            BfParser parser = new BfParser(text, _commentToken);
             List<BfCommand> parsedCommands = new List<BfCommand>();
 
             while ((cmd = parser.ParseNextCommand()) != BfCommand.Eof)

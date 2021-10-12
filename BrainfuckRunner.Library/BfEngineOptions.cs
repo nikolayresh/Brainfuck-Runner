@@ -19,9 +19,9 @@ namespace BrainfuckRunner.Library
         /// <summary>
         /// By default, a '#' character will be used to mark comment lines
         /// </summary>
-        public const char PresetCommentToken = '#';
+        public const string PresetCommentToken = "#";
 
-        internal HashSet<char> CommentTokens { get; private set; }
+        internal string CommentToken { get; private set; }
 
         internal int TapeSize { get; private set; } = PresetTapeSize;
 
@@ -107,16 +107,15 @@ namespace BrainfuckRunner.Library
             return this;
         }
 
-        public BfEngineOptions WithCommentToken(char token)
+        public BfEngineOptions WithCommentToken(string token)
         {
-            (CommentTokens ??= new HashSet<char>()).Add(token);
+            CommentToken = token;
             return this;
         }
 
         public BfEngineOptions WithPresetCommentToken()
         {
-            (CommentTokens ??= new HashSet<char>()).Clear();
-            CommentTokens.Add(PresetCommentToken);
+            CommentToken = PresetCommentToken;
             return this;
         }
 

@@ -61,13 +61,14 @@ namespace BrainfuckRunner.Library.Executors
                     case BfCommand.Decrement:
                         delta.Value--;
                         continue;
+
                     case BfCommand.Increment:
                         delta.Value++;
                         continue;
                 }
             }
 
-            bool baseCellWillTurnZero()
+            bool BaseCellWillTurnZero()
             {
                 int baseDelta = Map[0].Value;
                 return baseDelta == -1 || (engine.OnCellOverflow == BfCellOverflowBehavior.ApplyOverflow && baseDelta == 1);
@@ -75,7 +76,7 @@ namespace BrainfuckRunner.Library.Executors
 
             return minOffset != maxOffset && 
                    ptr == 0 && 
-                   baseCellWillTurnZero();
+                   BaseCellWillTurnZero();
         }
 
         /// <summary>
