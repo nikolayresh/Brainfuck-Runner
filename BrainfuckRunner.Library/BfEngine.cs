@@ -34,7 +34,7 @@ namespace BrainfuckRunner.Library
         /// <summary>
         /// Validates Brainfuck code from specified text source using tolerance policy
         /// </summary>
-        public static BfValidateResult Validate(TextReader reader, BfValidateTolerance tolerance)
+        public static BfValidateResult Validate(TextReader reader, BfTolerance tolerance)
         {
             char[] chars = ReadChars(reader).ToArray();
 
@@ -47,15 +47,15 @@ namespace BrainfuckRunner.Library
         public static BfValidateResult Validate(TextReader reader)
         {
             return Validate(reader,
-                BfValidateTolerance.ToNonBrainfuckContent | 
-                BfValidateTolerance.ToWhiteSpaceContent | 
-                BfValidateTolerance.ToNewLines);
+                BfTolerance.ToNonBrainfuckContent | 
+                BfTolerance.ToWhiteSpaceContent | 
+                BfTolerance.ToNewLines);
         }
 
         /// <summary>
         /// Validates Brainfuck code from file specified by path using tolerance policy
         /// </summary>
-        public static BfValidateResult ValidateFile(string path, BfValidateTolerance tolerance)
+        public static BfValidateResult ValidateFile(string path, BfTolerance tolerance)
         {
             using (StreamReader sr = File.OpenText(path))
             {
@@ -69,15 +69,15 @@ namespace BrainfuckRunner.Library
         public static BfValidateResult ValidateFile(string path)
         {
             return ValidateFile(path,
-                BfValidateTolerance.ToNonBrainfuckContent |
-                BfValidateTolerance.ToWhiteSpaceContent |
-                BfValidateTolerance.ToNewLines);
+                BfTolerance.ToNonBrainfuckContent |
+                BfTolerance.ToWhiteSpaceContent |
+                BfTolerance.ToNewLines);
         }
 
         /// <summary>
         /// Validates code from specified Brainfuck script using tolerance policy
         /// </summary>
-        public static BfValidateResult ValidateScript(string script, BfValidateTolerance tolerance)
+        public static BfValidateResult ValidateScript(string script, BfTolerance tolerance)
         {
             using (StringReader sr = new(script))
             {
@@ -91,9 +91,9 @@ namespace BrainfuckRunner.Library
         public static BfValidateResult ValidateScript(string script)
         {
             return ValidateScript(script,
-                BfValidateTolerance.ToNonBrainfuckContent | 
-                BfValidateTolerance.ToWhiteSpaceContent | 
-                BfValidateTolerance.ToNewLines);
+                BfTolerance.ToNonBrainfuckContent | 
+                BfTolerance.ToWhiteSpaceContent | 
+                BfTolerance.ToNewLines);
         }
 
         /// <summary>
@@ -146,9 +146,9 @@ namespace BrainfuckRunner.Library
 
             if (options == null)
             {
-                throw new ArgumentNullException(
-                    nameof(optionsAccessor),
-                    "Value of options is not defined (null)");
+                throw new ArgumentException(
+                    "Value of options is not provided (null)",
+                    nameof(optionsAccessor));
             }
 
             if (options.TapeSize <= 0)
@@ -333,16 +333,16 @@ namespace BrainfuckRunner.Library
             int loops = 0;
             BfCommand cmd;
             BfParser parser = new BfParser(text, _commentTokens);
-            List<BfCommand> commands = new List<BfCommand>();
+            List<BfCommand> parsedCommands = new List<BfCommand>();
 
             while ((cmd = parser.ParseNextCommand()) != BfCommand.Eof)
             {
-                commands.Add(cmd);
+                parsedCommands.Add(cmd);
                 cmd.TryChangeLoopsRef(ref loops);
             }
 
             EnsureLoops(loops);
-            _commands = commands.ToArray();
+            _commands = parsedCommands.ToArray();
         }
 
         private static void EnsureLoops(int loops)

@@ -10,7 +10,7 @@ namespace BrainfuckRunner.Tests
         public void validate_result_should_fail()
         {
             const string script = "   a<b>c+++q.w.e,rty";
-            const BfValidateTolerance tolerance = BfValidateTolerance.ToWhiteSpaceContent;
+            const BfTolerance tolerance = BfTolerance.ToWhiteSpaceContent;
 
             BfValidateResult vr = BfEngine.ValidateScript(script, tolerance);
 
@@ -75,7 +75,7 @@ namespace BrainfuckRunner.Tests
             const string script = ">>>> abc .++<[-]++QWERTY";
             BfValidateResult vr;
 
-            vr = BfEngine.ValidateScript(script, BfValidateTolerance.ToWhiteSpaceContent);
+            vr = BfEngine.ValidateScript(script, BfTolerance.ToWhiteSpaceContent);
 
             Assert.NotNull(vr);
             Assert.False(vr.IsValid);
@@ -100,7 +100,7 @@ namespace BrainfuckRunner.Tests
             const string script = " >>>++[.>>>+<-]  >>> ";
             BfValidateResult vr;
 
-            vr = BfEngine.ValidateScript(script, BfValidateTolerance.ToNewLines);
+            vr = BfEngine.ValidateScript(script, BfTolerance.ToNewLines);
 
             Assert.NotNull(vr);
             Assert.False(vr.IsValid);
@@ -132,7 +132,7 @@ namespace BrainfuckRunner.Tests
             const string script = "   >>>><++++++-->><. ";
             BfValidateResult vr;
 
-            vr = BfEngine.ValidateScript(script, BfValidateTolerance.ToWhiteSpaceContent);
+            vr = BfEngine.ValidateScript(script, BfTolerance.ToWhiteSpaceContent);
 
             Assert.NotNull(vr);
             Assert.Empty(vr.GetErrors());
@@ -145,7 +145,7 @@ namespace BrainfuckRunner.Tests
             const string script = " ++++.,   ";
             BfValidateResult vr;
 
-            vr = BfEngine.ValidateScript(script, BfValidateTolerance.None);
+            vr = BfEngine.ValidateScript(script, BfTolerance.None);
 
             Assert.NotNull(vr);
             Assert.False(vr.IsValid);
@@ -167,7 +167,7 @@ namespace BrainfuckRunner.Tests
         [Fact]
         public void when_no_tolerance_to_newline_chars_validation_result_should_fail()
         {
-            const BfValidateTolerance tolerance = BfValidateTolerance.ToNonBrainfuckContent | BfValidateTolerance.ToWhiteSpaceContent;
+            const BfTolerance tolerance = BfTolerance.ToNonBrainfuckContent | BfTolerance.ToWhiteSpaceContent;
             const string scriptLF = ">>>  ++[--].[+<+] \n++[-.]";
             const string scriptCR = "+++.[->>>>+]  \r-.[+>>+.]";
             const string scriptCRLF = "++[>>--++<+-.] \r\n+++[-.]++[>>>.]";

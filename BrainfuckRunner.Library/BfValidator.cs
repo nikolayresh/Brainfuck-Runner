@@ -16,7 +16,7 @@ namespace BrainfuckRunner.Library
              BfParser.CommandSet
                  .Select(cmd => $@"\{cmd}"));
 
-        internal static BfValidateResult Validate(char[] code, BfValidateTolerance tolerance)
+        internal static BfValidateResult Validate(char[] code, BfTolerance tolerance)
         {
             BfValidateResult result = new BfValidateResult();
 
@@ -105,10 +105,10 @@ namespace BrainfuckRunner.Library
         /// </summary>
         private static void ValidatePlainContent(
             string content, int pos, 
-            BfValidateTolerance tolerance, 
+            BfTolerance tolerance, 
             SortedSet<BfValidateError> errors)
         {
-            if (!tolerance.HasFlag(BfValidateTolerance.ToNonBrainfuckContent))
+            if (!tolerance.HasFlag(BfTolerance.ToNonBrainfuckContent))
             {
                 // no tolerance to non-Brainfuck content
                 MatchCollection matches = Regex.Matches(content, 
@@ -126,7 +126,7 @@ namespace BrainfuckRunner.Library
                 }
             }
 
-            if (!tolerance.HasFlag(BfValidateTolerance.ToWhiteSpaceContent))
+            if (!tolerance.HasFlag(BfTolerance.ToWhiteSpaceContent))
             {
                 // no tolerance to whitespace
                 MatchCollection matches = Regex.Matches(content, "[ ]+", RegexOptions.Compiled);
@@ -143,7 +143,7 @@ namespace BrainfuckRunner.Library
                 }
             }
 
-            if (!tolerance.HasFlag(BfValidateTolerance.ToNewLines))
+            if (!tolerance.HasFlag(BfTolerance.ToNewLines))
             {
 	            // no tolerance to new lines
 	            MatchCollection matches = Regex.Matches(content, "[\r\n]+", RegexOptions.Compiled);

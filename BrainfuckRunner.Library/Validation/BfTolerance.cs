@@ -6,7 +6,7 @@ namespace BrainfuckRunner.Library.Validation
     /// Tolerance policy of validator
     /// </summary>
     [Flags]
-    public enum BfValidateTolerance
+    public enum BfTolerance
     {
         /// <summary>
         /// No tolerance at all. Validator will consider new lines, whitespace characters
