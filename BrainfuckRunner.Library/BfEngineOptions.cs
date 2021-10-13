@@ -17,7 +17,7 @@ namespace BrainfuckRunner.Library
         public const int PresetTapeSize = 30_000;
 
         /// <summary>
-        /// By default, a '#' character will be used to mark comment lines
+        /// By default, a '#' token will be used to mark comment lines
         /// </summary>
         public const string PresetCommentToken = "#";
 
