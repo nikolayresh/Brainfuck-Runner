@@ -18,6 +18,132 @@ namespace BrainfuckRunner.Tests
             _output = output;
         }
 
+        [Fact(DisplayName = "Reverse (optimized)", Timeout = RunTimeout)]
+        [Trait("Is optimized", "Yes")]
+        public void execute_optimized_Reverse()
+        {
+            const string testWord = "AWESOME!";
+
+            StringReader sr = new StringReader(testWord);
+            StringWriter sw = new StringWriter();
+            BfEngine engine = new BfEngine(new BfEngineOptions()
+                .WithInput(sr)
+                .WithOutput(sw)
+                .WithOptimizedExecutor());
+
+            TimeSpan elapsed = engine.Execute(OpenText("reverse.bf"));
+            string output = sw.ToString();
+
+            Assert.Equal("!EMOSEWA", output);
+            _output.WriteLine($"Time taken to execute: {elapsed:c}");
+        }
+
+        [Fact(DisplayName = "Reverse", Timeout = RunTimeout)]
+        [Trait("Is optimized", "No")]
+        public void execute_Reverse()
+        {
+            const string testWord = "AWESOME!";
+
+            StringReader sr = new StringReader(testWord);
+            StringWriter sw = new StringWriter();
+            BfEngine engine = new BfEngine(new BfEngineOptions()
+                .WithInput(sr)
+                .WithOutput(sw)
+                .WithSimpleExecutor());
+
+            TimeSpan elapsed = engine.Execute(OpenText("reverse.bf"));
+            string output = sw.ToString();
+
+            Assert.Equal("!EMOSEWA", output);
+            _output.WriteLine($"Time taken to execute: {elapsed:c}");
+        }
+
+        [Fact(DisplayName = "Word Count", Timeout = RunTimeout)]
+        [Trait("Is optimized", "No")]
+        public void execute_WordCount()
+        {
+            const string testLine = "England Norway USA Sweden Japan France Italy\nIceland Spain";
+
+            StringReader sr = new StringReader(testLine);
+            StringWriter sw = new StringWriter();
+            BfEngine engine = new BfEngine(new BfEngineOptions()
+                .WithInput(sr)
+                .WithOutput(sw)
+                .WithSimpleExecutor());
+
+            TimeSpan elapsed = engine.Execute(OpenText("word-count.bf"));
+
+            string output = sw.ToString();
+            string[] parts = output.Split('\t', StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => x.Trim('\n')).ToArray();
+
+            Assert.Equal(3, parts.Length);
+            Assert.Equal(1, int.Parse(parts[0]));
+            Assert.Equal(testLine.Split(new[] {' ', '\n'}, StringSplitOptions.RemoveEmptyEntries).Length, int.Parse(parts[1]));
+            Assert.Equal(testLine.Length, int.Parse(parts[2]));
+
+            _output.WriteLine($"Time taken to execute: {elapsed:c}");
+        }
+
+        [Fact(DisplayName = "Word Count (optimized)", Timeout = RunTimeout)]
+        [Trait("Is optimized", "Yes")]
+        public void execute_optimized_WordCount()
+        {
+            const string testLine = "England Norway USA Sweden Japan France Italy\nIceland Spain";
+
+            StringReader sr = new StringReader(testLine);
+            StringWriter sw = new StringWriter();
+            BfEngine engine = new BfEngine(new BfEngineOptions()
+                .WithInput(sr)
+                .WithOutput(sw)
+                .WithOptimizedExecutor());
+
+            TimeSpan elapsed = engine.Execute(OpenText("word-count.bf"));
+
+            string output = sw.ToString();
+            string[] parts = output.Split('\t', StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => x.Trim('\n')).ToArray();
+
+            Assert.Equal(3, parts.Length);
+            Assert.Equal(1, int.Parse(parts[0]));
+            Assert.Equal(testLine.Split(new[] { ' ', '\n' }, StringSplitOptions.RemoveEmptyEntries).Length, int.Parse(parts[1]));
+            Assert.Equal(testLine.Length, int.Parse(parts[2]));
+
+            _output.WriteLine($"Time taken to execute: {elapsed:c}");
+        }
+
+        [Fact(DisplayName = "Golden Ratio", Timeout = RunTimeout)]
+        [Trait("Is optimized", "No")]
+        public void execute_GoldenRatio()
+        {
+            StringWriter sw = new StringWriter();
+            BfEngine engine = new BfEngine(new BfEngineOptions()
+                .WithOutput(sw)
+                .WithSimpleExecutor());
+
+            const string expected = "1.618033988749894848204586834365638117";
+            TimeSpan elapsed = engine.Execute(OpenText("golden-ratio.bf"));
+
+            Assert.Equal(expected, sw.ToString());
+            _output.WriteLine($"Time taken to execute: {elapsed:c}");
+        }
+
+        [Fact(DisplayName = "Golden Ratio (optimized)", Timeout = RunTimeout)]
+        [Trait("Is optimized", "Yes")]
+        public void execute_optimized_GoldenRatio()
+        {
+            StringWriter sw = new StringWriter();
+            BfEngine engine = new BfEngine(new BfEngineOptions()
+                .WithOutput(sw)
+                .WithOptimizedExecutor());
+
+            const string expected = "1.618033988749894848204586834365638117";
+            TimeSpan elapsed = engine.Execute(OpenText("golden-ratio.bf"));
+
+            Assert.Equal(expected, sw.ToString());
+            _output.WriteLine($"Time taken to execute: {elapsed:c}");
+        }
+
         [Fact(DisplayName = "Letter A", Timeout = RunTimeout)]
         [Trait("Is optimized", "No")]
         public void execute_LetterA()
@@ -25,7 +151,8 @@ namespace BrainfuckRunner.Tests
             StringWriter sw = new StringWriter();
             BfEngine engine = new BfEngine(new BfEngineOptions()
                 .WithOutput(sw)
-                .WithSimpleExecutor());
+                .WithSimpleExecutor()
+                .WithCommentToken("//"));
 
             TimeSpan elapsed = engine.Execute(OpenText("LetterA.bf"));
             string output = sw.ToString();
@@ -41,7 +168,8 @@ namespace BrainfuckRunner.Tests
             StringWriter sw = new StringWriter();
             BfEngine engine = new BfEngine(new BfEngineOptions()
                 .WithOutput(sw)
-                .WithOptimizedExecutor());
+                .WithOptimizedExecutor()
+                .WithCommentToken("//"));
 
             TimeSpan elapsed = engine.Execute(OpenText("LetterA.bf"));
             string output = sw.ToString();
@@ -518,8 +646,10 @@ namespace BrainfuckRunner.Tests
 
         private static TextReader OpenText(string file)
         {
-            string path = Path.Combine("CodeFiles", file);
-            return File.OpenText(path);
+            string resourcePath = string.Join(".", "BrainfuckRunner.Tests.CodeFiles", file);
+            Stream resource = typeof(FileExecutorTests).Assembly.GetManifestResourceStream(resourcePath);
+
+            return resource != null ? new StreamReader(resource) : null;
         }
     }
 }

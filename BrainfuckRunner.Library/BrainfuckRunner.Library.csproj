@@ -4,16 +4,16 @@
     <TargetFramework>net5.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <PackageProjectUrl>https://github.com/nikolayresh/Brainfuck-Runner</PackageProjectUrl>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Nikolay Reshetinsky</Authors>
     <NeutralLanguage>en-US</NeutralLanguage>
     <RepositoryType>Library</RepositoryType>
     <RepositoryUrl>https://github.com/nikolayresh/Brainfuck-Runner.git</RepositoryUrl>
     <PackageTags>brainfuck;brain;brainfuck interpreter;brainfuck tokenizer;brainfuck validator;brainfuck engine;brainfuck runner;text processor</PackageTags>
-    <AssemblyVersion>1.0.12</AssemblyVersion>
-    <FileVersion>1.0.12</FileVersion>
-    <Description>Powerful Brainfuck language interpreter along with ability to tokenize &amp; validate the Brainfuck code</Description>
-    <Version>1.0.12</Version>
+    <AssemblyVersion>1.0.13</AssemblyVersion>
+    <FileVersion>1.0.13</FileVersion>
+    <Description>Powerful Brainfuck language interpreter with ability to tokenize &amp; validate the Brainfuck code</Description>
+    <Version>1.0.13</Version>
     <PackageId>Brainfuck-Runner</PackageId>
     <Product>Brainfuck Runner</Product>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

@@ -72,23 +72,22 @@ namespace BrainfuckRunner.Library
             string line;
             while ((line = _text.ReadLine()) != null)
             {
-                int endIndex = line.Length;
+                int stopIndex = line.Length;
 
                 if (_commentToken != null)
                 {
                     int commentIndex = line.IndexOf(_commentToken, StringComparison.InvariantCulture);
-                    if (commentIndex != -1) endIndex = commentIndex;
+                    if (commentIndex != -1) stopIndex = commentIndex;
                 }
 
                 int i = 0;
-                while (i < endIndex)
+                while (i < stopIndex)
                 {
                     if (IsBrainfuckCommand(line[i], out BfCommand cmd))
                     {
                         parsedCommands.Add(cmd);
                         cmd.TryChangeLoopsRef(ref _unmatchedLoops);
                     }
-
                     i++;
                 }
             }

@@ -418,8 +418,11 @@ namespace BrainfuckRunner.Library.Executors
 
         private void ReadIntoCell(ref int iNextCmd)
         {
-            int nextChar = Engine.Input.Read();
-            Engine.Cells[Engine.Pointer] = (byte) nextChar;
+            int @char = Engine.Input.Read();
+            if (@char != BfParser.Eof)
+            {
+                Engine.Cells[Engine.Pointer] = (byte) @char;
+            }
             iNextCmd++;
         }
 

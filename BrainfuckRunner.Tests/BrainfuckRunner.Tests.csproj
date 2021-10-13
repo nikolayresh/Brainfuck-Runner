@@ -11,9 +11,9 @@
     <Authors>Nikolay Reshetinsky</Authors>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageTags></PackageTags>
-    <Version>1.0.12</Version>
-    <AssemblyVersion>1.0.12</AssemblyVersion>
-    <FileVersion>1.0.12</FileVersion>
+    <Version>1.0.13</Version>
+    <AssemblyVersion>1.0.13</AssemblyVersion>
+    <FileVersion>1.0.13</FileVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Company>Nikolay Reshetinsky (777nickresh@gmail.com)</Company>
@@ -53,49 +53,55 @@
     <None Remove="CodeFiles/Mandel.bf" />
     <None Remove="CodeFiles\BenchOne.bf" />
     <None Remove="CodeFiles\BenchTwo.bf" />
+    <None Remove="CodeFiles\golden-ratio.bf" />
     <None Remove="CodeFiles\quine.bf" />
+    <None Remove="CodeFiles\reverse.bf" />
+    <None Remove="CodeFiles\word-count.bf" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="CodeFiles\99_Bottles_Of_Beer.bf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="CodeFiles\Alphabet.bf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="CodeFiles\BenchOne.bf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="CodeFiles\BenchTwo.bf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="CodeFiles\BusyBeaver.bf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="CodeFiles\DisplayAscii.bf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="CodeFiles\Factor.bf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="CodeFiles\Hanoi.bf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="CodeFiles\HelloWorld.bf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="CodeFiles\LetterA.bf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="CodeFiles\Long.bf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="CodeFiles\Mandel.bf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="CodeFiles\quine.bf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="CodeFiles\99_Bottles_Of_Beer.bf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CodeFiles\Alphabet.bf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CodeFiles\BenchOne.bf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CodeFiles\BenchTwo.bf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CodeFiles\BusyBeaver.bf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CodeFiles\DisplayAscii.bf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CodeFiles\Factor.bf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CodeFiles\golden-ratio.bf" />
+    <EmbeddedResource Include="CodeFiles\Hanoi.bf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CodeFiles\HelloWorld.bf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CodeFiles\LetterA.bf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CodeFiles\Long.bf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CodeFiles\Mandel.bf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CodeFiles\quine.bf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CodeFiles\reverse.bf" />
+    <EmbeddedResource Include="CodeFiles\word-count.bf" />
   </ItemGroup>
 
   <ItemGroup>
