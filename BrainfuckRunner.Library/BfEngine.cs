@@ -161,24 +161,38 @@ namespace BrainfuckRunner.Library
             if (options.Input == null)
             {
                 throw new ArgumentException(
-                    "Input is not defined for engine",
+                    "Input is not defined for engine (null)",
                     nameof(optionsAccessor));
             }
 
             if (options.Output == null)
             {
                 throw new ArgumentException(
-                    "Output is not defined for engine",
+                    "Output is not defined for engine (null)",
                     nameof(optionsAccessor));
             }
 
             if (options.CommentToken != null)
             {
-                char[] tokens = options.CommentToken.ToArray();
-                if (tokens.Any(ch => BfParser.IsBrainfuckCommand(ch, out _)))
+                if (options.CommentToken.Length < 1)
                 {
                     throw new ArgumentException(
-                        "At least a single comment token is a valid Brainfuck command",
+                        "Invalid comment token. It should have a non-zero length",
+                        nameof(optionsAccessor));
+                }
+
+                string trimmed = options.CommentToken.Trim();
+                if (trimmed.Length != options.CommentToken.Length)
+                {
+                    throw new ArgumentException(
+                        "Invalid comment token. It contains whitespace characters",
+                        nameof(optionsAccessor));
+                }
+
+                if (options.CommentToken.Any(ch => BfParser.IsBrainfuckCommand(ch, out _)))
+                {
+                    throw new ArgumentException(
+                        "Invalid comment token. At least a single character is a valid Brainfuck command",
                         nameof(optionsAccessor));
                 }
             } 
@@ -330,19 +344,11 @@ namespace BrainfuckRunner.Library
 
         private void ReadBrainfuckCommands(TextReader text)
         {
-            int loops = 0;
-            BfCommand cmd;
-            BfParser parser = new BfParser(text, _commentToken);
-            List<BfCommand> parsedCommands = new List<BfCommand>();
-
-            while ((cmd = parser.ParseNextCommand()) != BfCommand.Eof)
-            {
-                parsedCommands.Add(cmd);
-                cmd.TryChangeLoopsRef(ref loops);
-            }
-
-            EnsureLoops(loops);
-            _commands = parsedCommands.ToArray();
+            BfParser parser = new(text, _commentToken);
+            BfCommand[] parsedCommands = parser.ParseCommands();
+          
+            EnsureLoops(parser.UnmatchedLoops);
+            _commands = parsedCommands;
         }
 
         private static void EnsureLoops(int loops)
@@ -377,7 +383,7 @@ namespace BrainfuckRunner.Library
             BfExecutor executor = BfExecutor.CreateInstance(this);
             executor.Initialize();
 
-            // need local variables here to gain a faster access to all resolved Brainfuck commands
+            // need local variables here to gain a faster access to Brainfuck commands
             BfCommand cmd;
             Span<BfCommand> commands = _commands;
             int iNextCmd = 0, iEndCmd = commands.Length;

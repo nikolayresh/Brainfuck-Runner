@@ -8,7 +8,7 @@
         internal static BfExecutor CreateInstance(BfEngine engine)
         {
             return engine.IsOptimized 
-                ? (BfExecutor) new OptimizedBfExecutor(engine) 
+                ? new OptimizedBfExecutor(engine) 
                 : new SimpleBfExecutor(engine);
         }
 

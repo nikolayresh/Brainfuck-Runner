@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
 
@@ -10,21 +11,6 @@ namespace BrainfuckRunner.Library
         /// Defines state when end of file reached
         /// </summary>
         internal const int Eof = -1;
-
-        /// <summary>
-        /// Defines a line-feed control character, char(10)
-        /// </summary>
-        internal const int LineFeed = 10;
-
-        /// <summary>
-        /// Defines a carriage-return control character, char(13)
-        /// </summary>
-        internal const int CarriageReturn = 13;
-
-        /// <summary>
-        /// Defines a white-space control character, char(32)
-        /// </summary>
-        internal const int WhiteSpace = 32;
 
         /// <summary>
         /// All Brainfuck commands placed into set
@@ -68,6 +54,7 @@ namespace BrainfuckRunner.Library
 
         private readonly TextReader _text;
         private readonly string _commentToken;
+        private int _unmatchedLoops;
 
         internal BfParser(TextReader text, string commentToken)
         {
@@ -76,76 +63,45 @@ namespace BrainfuckRunner.Library
         }
 
         /// <summary>
-        /// Returns a next parsed Brainfuck command
+        /// Returns next parsed Brainfuck command
         /// </summary>
-        internal BfCommand ParseNextCommand()
+        internal BfCommand[] ParseCommands()
         {
-            bool withinComment = false;
+            List<BfCommand> parsedCommands = new();
 
-            while (_text.Peek() != Eof && SkipWhiteSpace())
+            string line;
+            while ((line = _text.ReadLine()) != null)
             {
-                if (!withinComment)
+                int endIndex = line.Length;
+
+                if (_commentToken != null)
                 {
-                    if (IsBrainfuckCommand(_text.Peek(), out BfCommand cmd))
+                    int commentIndex = line.IndexOf(_commentToken, StringComparison.InvariantCulture);
+                    if (commentIndex != -1) endIndex = commentIndex;
+                }
+
+                int i = 0;
+                while (i < endIndex)
+                {
+                    if (IsBrainfuckCommand(line[i], out BfCommand cmd))
                     {
-                        _text.Read();
-                        return cmd;
+                        parsedCommands.Add(cmd);
+                        cmd.TryChangeLoopsRef(ref _unmatchedLoops);
                     }
 
-                    if (_commentToken != null)
-                    {
-                        withinComment = TryReadCommentToken();
-                        continue;
-                    }
-
-                    _text.Read();
-                }
-                else
-                {
-                    if (TryForNewLine()) withinComment = false;
+                    i++;
                 }
             }
 
-            return BfCommand.Eof;
+            return parsedCommands.ToArray();
         }
 
-        private bool SkipWhiteSpace()
+        internal int UnmatchedLoops
         {
-            while (_text.Peek() == WhiteSpace)
+            get
             {
-                _text.Read();
+                return _unmatchedLoops;
             }
-
-            return _text.Peek() != Eof;
-        }
-
-        private bool TryForNewLine()
-        {
-            int @char = _text.Read();
-
-            if (@char is CarriageReturn or LineFeed)
-            {
-                if (OperatingSystem.IsWindows() && @char is CarriageReturn && _text.Peek() is LineFeed)
-                {
-                    _text.Read();
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
-        private bool TryReadCommentToken()
-        {
-            int i = 0;
-            for (; i < _commentToken.Length; i++)
-            {
-                int next = _text.Read();
-                if (next == Eof || _commentToken[i] != (char) next) break;
-            }
-
-            return i == _commentToken.Length;
         }
     }
 }
