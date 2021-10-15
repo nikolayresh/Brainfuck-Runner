@@ -52,14 +52,15 @@ namespace BrainfuckRunner.Library
             return cmd != BfCommand.Unknown;
         }
 
-        private readonly TextReader _text;
-        private readonly string _commentToken;
-        private int _unmatchedLoops;
+        private TextReader _text;
+        private string _commentToken;
+        private int _loopState;
 
-        internal BfParser(TextReader text, string commentToken)
+        internal void SetState(TextReader text, string commentToken)
         {
             _text = text;
             _commentToken = commentToken;
+            _loopState = 0;
         }
 
         /// <summary>
@@ -77,29 +78,28 @@ namespace BrainfuckRunner.Library
                 if (_commentToken != null)
                 {
                     int commentIndex = line.IndexOf(_commentToken, StringComparison.InvariantCulture);
-                    if (commentIndex != -1) stopIndex = commentIndex;
+                    if (commentIndex >= 0) stopIndex = commentIndex;
                 }
 
                 int i = 0;
                 while (i < stopIndex)
                 {
-                    if (IsBrainfuckCommand(line[i], out BfCommand cmd))
+                    if (IsBrainfuckCommand(line[i++], out BfCommand cmd))
                     {
                         parsedCommands.Add(cmd);
-                        cmd.TryChangeLoopsRef(ref _unmatchedLoops);
+                        cmd.TryChangeLoopsRef(ref _loopState);
                     }
-                    i++;
                 }
             }
 
             return parsedCommands.ToArray();
         }
 
-        internal int UnmatchedLoops
+        internal int LoopState
         {
             get
             {
-                return _unmatchedLoops;
+                return _loopState;
             }
         }
     }

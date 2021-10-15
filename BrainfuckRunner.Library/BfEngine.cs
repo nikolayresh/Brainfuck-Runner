@@ -203,6 +203,7 @@ namespace BrainfuckRunner.Library
 
         private int _ptr;
         private BfCommand[] _commands;
+        private readonly BfParser _parser;
         private readonly byte[] _cells;
         private readonly BfCellOverflowBehavior _onCellOverflow;
         private readonly BfMemoryOverflowBehavior _onMemoryOverflow;
@@ -215,6 +216,7 @@ namespace BrainfuckRunner.Library
         {
             BfEngineOptions options = ValidateOptions(optionsAccessor);
 
+            _parser = new BfParser();
             _cells = new byte[options.TapeSize];
             _input = options.Input;
             _output = options.Output;
@@ -344,27 +346,27 @@ namespace BrainfuckRunner.Library
 
         private void ReadBrainfuckCommands(TextReader text)
         {
-            BfParser parser = new(text, _commentToken);
-            BfCommand[] parsedCommands = parser.ParseCommands();
-          
-            EnsureLoops(parser.UnmatchedLoops);
+            _parser.SetState(text, _commentToken);
+            BfCommand[] parsedCommands = _parser.ParseCommands();
+            EnsureLoops(_parser.LoopState);
+
             _commands = parsedCommands;
         }
 
-        private static void EnsureLoops(int loops)
+        private static void EnsureLoops(int loopState)
         {
-            if (loops != 0)
+            if (loopState != 0)
             {
-                if (loops > 0)
+                if (loopState > 0)
                 {
                     throw new BfException(
                         BfRuntimeError.HasUnclosedLoops,
-                        $"Unclosed loop(s) encountered. Count of unclosed loops: {loops}");
+                        $"Unclosed loop(s) encountered. Count of unclosed loopState: {loopState}");
                 }
 
                 throw new BfException(
                     BfRuntimeError.HasUnopenedLoops,
-                    $"Unopened loop(s) encountered. Count of unopened loops: {loops}");
+                    $"Unopened loop(s) encountered. Count of unopened loopState: {loopState}");
             }
         }
 
