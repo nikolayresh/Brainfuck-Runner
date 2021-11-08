@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using BrainfuckRunner.Library.Behaviors;
 using BrainfuckRunner.Library.Executors;
 using BrainfuckRunner.Library.Tokens;
@@ -203,14 +205,14 @@ namespace BrainfuckRunner.Library
 
         private int _ptr;
         private BfCommand[] _commands;
+        private TextReader _input;
+        private TextWriter _output;
 
         private readonly BfParser _parser;
         private readonly byte[] _cells;
         private readonly BfCellOverflowBehavior _onCellOverflow;
         private readonly BfMemoryOverflowBehavior _onMemoryOverflow;
         private readonly bool _isOptimized;
-        private readonly TextReader _input;
-        private readonly TextWriter _output;
         private readonly string _commentToken;
 
         public BfEngine(IOptions<BfEngineOptions> optionsAccessor)
@@ -253,6 +255,11 @@ namespace BrainfuckRunner.Library
             {
                 return _output;
             }
+
+            set
+            {
+                _output = value ?? throw new ArgumentNullException(nameof(value));
+            }
         }
 
         /// <summary>
@@ -264,6 +271,11 @@ namespace BrainfuckRunner.Library
             get
             {
                 return _input;
+            }
+
+            set
+            {
+                _input = value ?? throw new ArgumentNullException(nameof(value));
             }
         }
 
@@ -330,7 +342,7 @@ namespace BrainfuckRunner.Library
             ResetState();
             ReadBrainfuckCommands(reader);
 
-            return ExecuteCoreTimeout(timeout);
+            return ExecuteCoreWithTimeout(timeout);
         }
 
         /// <summary>
@@ -355,7 +367,7 @@ namespace BrainfuckRunner.Library
                 ReadBrainfuckCommands(sr);
             }
 
-            return ExecuteCoreTimeout(timeout);
+            return ExecuteCoreWithTimeout(timeout);
         }
 
         /// <summary>
@@ -435,7 +447,7 @@ namespace BrainfuckRunner.Library
             return stopwatch.Elapsed;
         }
 
-        private TimeSpan ExecuteCoreTimeout(TimeSpan timeout)
+        private TimeSpan ExecuteCoreWithTimeout(TimeSpan timeout)
         {
             if (timeout < TimeSpan.Zero)
             {
@@ -450,30 +462,39 @@ namespace BrainfuckRunner.Library
                 return ExecuteCore();
             }
 
-            BfExecutor executor = BfExecutor.CreateInstance(this);
-            executor.Initialize();
+            CancellationTokenSource cts = new();
+            CancellationToken ct = cts.Token;
 
-            // need local variables here to gain a faster access to Brainfuck commands
-            BfCommand cmd;
-            Span<BfCommand> commands = _commands;
-            int iNextCmd = 0, iEndCmd = commands.Length;
-
-            Stopwatch stopwatch = Stopwatch.StartNew();
-            DateTime stopTimeUtc = DateTime.UtcNow + timeout;
-
-            while (iNextCmd < iEndCmd)
+            // ReSharper disable once MethodSupportsCancellation
+            Task<TimeSpan> execTask = Task.Run(() =>
             {
-                if (DateTime.UtcNow > stopTimeUtc)
+                BfExecutor executor = BfExecutor.CreateInstance(this);
+                executor.Initialize();
+
+                // need local variables here to gain a faster access to Brainfuck commands
+                BfCommand cmd;
+                Span<BfCommand> commands = _commands;
+                int iNextCmd = 0, iEndCmd = commands.Length;
+
+                Stopwatch stopwatch = Stopwatch.StartNew();
+
+                while (iNextCmd < iEndCmd && !ct.IsCancellationRequested)
                 {
-                    throw new TimeoutException($"Timeout. Failed to execute code within duration of {timeout:g}");
+                    cmd = commands[iNextCmd];
+                    executor.RunCommand(cmd, ref iNextCmd);
                 }
 
-                cmd = commands[iNextCmd];
-                executor.RunCommand(cmd, ref iNextCmd);
+                stopwatch.Stop();
+                return stopwatch.Elapsed;
+            });
+
+            if (!execTask.Wait(timeout) || !execTask.IsCompletedSuccessfully)
+            {
+                cts.Cancel();
+                throw new TimeoutException($"Timeout! Failed to execute code successfully within duration of {timeout:g}");
             }
 
-            stopwatch.Stop();
-            return stopwatch.Elapsed;
+            return execTask.Result;
         }
 
         /// <summary>
