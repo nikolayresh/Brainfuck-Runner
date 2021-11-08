@@ -203,6 +203,7 @@ namespace BrainfuckRunner.Library
 
         private int _ptr;
         private BfCommand[] _commands;
+
         private readonly BfParser _parser;
         private readonly byte[] _cells;
         private readonly BfCellOverflowBehavior _onCellOverflow;
@@ -319,6 +320,19 @@ namespace BrainfuckRunner.Library
             return ExecuteCore();
         }
 
+        public TimeSpan Execute(TextReader reader, TimeSpan timeout)
+        {
+            if (reader == null)
+            {
+                throw new ArgumentNullException(nameof(reader));
+            }
+
+            ResetState();
+            ReadBrainfuckCommands(reader);
+
+            return ExecuteCoreTimeout(timeout);
+        }
+
         /// <summary>
         /// Executes all Brainfuck commands parsed from file specified by path
         /// </summary>
@@ -333,6 +347,17 @@ namespace BrainfuckRunner.Library
             return ExecuteCore();
         }
 
+        public TimeSpan ExecuteFile(string path, TimeSpan timeout)
+        {
+            using (StreamReader sr = File.OpenText(path))
+            {
+                ResetState();
+                ReadBrainfuckCommands(sr);
+            }
+
+            return ExecuteCoreTimeout(timeout);
+        }
+
         /// <summary>
         /// Executes all Brainfuck commands from specified script
         /// </summary>
@@ -344,12 +369,20 @@ namespace BrainfuckRunner.Library
             }
         }
 
+        public TimeSpan ExecuteScript(string script, TimeSpan timeout)
+        {
+            using (StringReader sr = new(script))
+            {
+                return Execute(sr, timeout);
+            }
+        }
+
         private void ReadBrainfuckCommands(TextReader text)
         {
             _parser.SetState(text, _commentToken);
             BfCommand[] parsedCommands = _parser.ParseCommands();
-            EnsureLoops(_parser.LoopState);
 
+            EnsureLoops(_parser.LoopState);
             _commands = parsedCommands;
         }
 
@@ -361,12 +394,12 @@ namespace BrainfuckRunner.Library
                 {
                     throw new BfException(
                         BfRuntimeError.HasUnclosedLoops,
-                        $"Unclosed loop(s) encountered. Count of unclosed loopState: {loopState}");
+                        $"Unclosed loop(s) encountered. Count of unclosed loops: {loopState}");
                 }
 
                 throw new BfException(
                     BfRuntimeError.HasUnopenedLoops,
-                    $"Unopened loop(s) encountered. Count of unopened loopState: {loopState}");
+                    $"Unopened loop(s) encountered. Count of unopened loops: {loopState}");
             }
         }
 
@@ -394,6 +427,47 @@ namespace BrainfuckRunner.Library
 
             while (iNextCmd < iEndCmd)
             {
+                cmd = commands[iNextCmd];
+                executor.RunCommand(cmd, ref iNextCmd);
+            }
+
+            stopwatch.Stop();
+            return stopwatch.Elapsed;
+        }
+
+        private TimeSpan ExecuteCoreTimeout(TimeSpan timeout)
+        {
+            if (timeout < TimeSpan.Zero)
+            {
+                throw new ArgumentException(
+                    "Value of timeout cannot be negative",
+                    nameof(timeout));
+            }
+
+            if (timeout == TimeSpan.Zero)
+            {
+                // as timeout was not specified
+                return ExecuteCore();
+            }
+
+            BfExecutor executor = BfExecutor.CreateInstance(this);
+            executor.Initialize();
+
+            // need local variables here to gain a faster access to Brainfuck commands
+            BfCommand cmd;
+            Span<BfCommand> commands = _commands;
+            int iNextCmd = 0, iEndCmd = commands.Length;
+
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            DateTime stopTimeUtc = DateTime.UtcNow + timeout;
+
+            while (iNextCmd < iEndCmd)
+            {
+                if (DateTime.UtcNow > stopTimeUtc)
+                {
+                    throw new TimeoutException($"Timeout. Failed to execute code within duration of {timeout:g}");
+                }
+
                 cmd = commands[iNextCmd];
                 executor.RunCommand(cmd, ref iNextCmd);
             }

@@ -162,9 +162,9 @@ namespace BrainfuckRunner.Library.Executors
 
                 if (ptr < 0 || ptr >= tapeSize)
                 {
-                    ptr = (ptr < 0)
+                    ptr = ptr < 0
                         ? 0
-                        : (tapeSize - 1);
+                        : tapeSize - 1;
                 }
             }
 
