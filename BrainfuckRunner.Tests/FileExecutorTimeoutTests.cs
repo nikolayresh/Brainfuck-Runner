@@ -15,7 +15,7 @@ namespace BrainfuckRunner.Tests
             StringWriter sw = new StringWriter();
             BfEngine engine = new BfEngine(new BfEngineOptions()
                 .WithOutput(sw)
-                .WithOptimizedExecutor());
+                .WithSimpleExecutor());
 
             Assert.Throws<TimeoutException>(() => engine.Execute(OpenText("Long.bf"), timeout));
         }
