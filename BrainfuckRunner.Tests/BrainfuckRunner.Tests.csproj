@@ -11,9 +11,9 @@
     <Authors>Nikolay Reshetinsky</Authors>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageTags></PackageTags>
-    <Version>1.0.13</Version>
-    <AssemblyVersion>1.0.13</AssemblyVersion>
-    <FileVersion>1.0.13</FileVersion>
+    <Version>1.0.14</Version>
+    <AssemblyVersion>1.0.14</AssemblyVersion>
+    <FileVersion>1.0.14</FileVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Company>Nikolay Reshetinsky (777nickresh@gmail.com)</Company>

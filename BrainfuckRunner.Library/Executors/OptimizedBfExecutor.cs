@@ -351,7 +351,7 @@ namespace BrainfuckRunner.Library.Executors
                 loop.ScanStep = loop.ContentLength * (cmd == BfCommand.MoveBackward ? -1 : 1);
             }
 
-            byte[] cells = Engine.Cells;
+            Span<byte> cells = Engine.Cells;
             int step = Math.Abs(loop.ScanStep.Value);
 
             if (loop.ScanStep < 0)
@@ -442,7 +442,7 @@ namespace BrainfuckRunner.Library.Executors
 
         private byte ApplyDeltaOnCell(byte current, int delta)
         {
-            unchecked
+            checked
             {
                 int ret = current + delta;
 
@@ -454,7 +454,7 @@ namespace BrainfuckRunner.Library.Executors
                 ret = Engine.OnCellOverflow switch
                 {
                     BfCellOverflowBehavior.ApplyOverflow => BfExtensions.Mod(ret, @base: 256),
-                    BfCellOverflowBehavior.SetThresholdValue => (ret < byte.MinValue) ? byte.MinValue : byte.MaxValue,
+                    BfCellOverflowBehavior.SetThresholdValue => ret < byte.MinValue ? byte.MinValue : byte.MaxValue,
                     _ => ret
                 };
 
