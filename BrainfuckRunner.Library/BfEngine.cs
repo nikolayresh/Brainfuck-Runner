@@ -462,7 +462,7 @@ namespace BrainfuckRunner.Library
                 return ExecuteCore();
             }
 
-            object isRunning = new();
+            using AutoResetEvent isRunning = new(initialState: false);
             CancellationTokenSource cts = new();
             CancellationToken ct = cts.Token;
 
@@ -477,12 +477,8 @@ namespace BrainfuckRunner.Library
                 Span<BfCommand> commands = _commands;
                 int iNextCmd = 0, iEndCmd = commands.Length;
 
-                lock (isRunning)
-                {
-                    // notify main thread
-                    Monitor.Pulse(isRunning);
-                }
-
+                // ReSharper disable once AccessToDisposedClosure
+                isRunning.Set();
                 Stopwatch stopwatch = Stopwatch.StartNew();
 
                 while (iNextCmd < iEndCmd && !ct.IsCancellationRequested)
@@ -495,12 +491,7 @@ namespace BrainfuckRunner.Library
                 return stopwatch.Elapsed;
             });
 
-            lock (isRunning)
-            {
-                // wait until executor completes initialization
-                // before actual execution
-                Monitor.Wait(isRunning);
-            }
+            isRunning.WaitOne();
 
             if (!execTask.Wait(timeout) || !execTask.IsCompletedSuccessfully)
             {

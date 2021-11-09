@@ -1,7 +1,9 @@
-﻿using BrainfuckRunner.Library.Behaviors;
+﻿using System.Diagnostics.CodeAnalysis;
+using BrainfuckRunner.Library.Behaviors;
 
 namespace BrainfuckRunner.Library.Executors
 {
+    [SuppressMessage("ReSharper", "SwitchStatementMissingSomeEnumCasesNoDefault")]
     internal sealed class BfSimpleHandlers
     {
         private readonly BfEngine _engine;
@@ -27,7 +29,7 @@ namespace BrainfuckRunner.Library.Executors
                 ret = engine.OnCellOverflow switch
                 {
                     BfCellOverflowBehavior.ApplyOverflow => BfExtensions.Mod(ret, @base: 256),
-                    BfCellOverflowBehavior.SetThresholdValue => (ret < byte.MinValue) ? byte.MinValue : byte.MaxValue,
+                    BfCellOverflowBehavior.SetThresholdValue => ret < byte.MinValue ? byte.MinValue : byte.MaxValue,
                     _ => ret
                 };
 

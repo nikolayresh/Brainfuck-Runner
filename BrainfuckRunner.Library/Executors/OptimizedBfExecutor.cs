@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using BrainfuckRunner.Library.Behaviors;
 
 namespace BrainfuckRunner.Library.Executors
 {
+    [SuppressMessage("ReSharper", "SwitchStatementMissingSomeEnumCasesNoDefault")]
     internal sealed class OptimizedBfExecutor : BfExecutor
     {
         private delegate void OptimizedHandler(ref int iNextCmd);
@@ -131,11 +133,10 @@ namespace BrainfuckRunner.Library.Executors
                 ptr += delta;
                 iCmd++;
 
-                if (ptr < 0 || ptr >= tapeSize)
-                {
-                    isOutOfRange = true;
-                    break;
-                }
+                if (ptr >= 0 && ptr < tapeSize) continue;
+
+                isOutOfRange = true;
+                break;
             }
 
             Engine.Pointer = ptr;
@@ -160,11 +161,13 @@ namespace BrainfuckRunner.Library.Executors
                 ptr += delta;
                 iCmd++;
 
-                if (ptr < 0 || ptr >= tapeSize)
+                if (ptr < 0)
                 {
-                    ptr = ptr < 0
-                        ? 0
-                        : tapeSize - 1;
+                    ptr = 0;
+                } 
+                else if (ptr >= tapeSize)
+                {
+                    ptr = tapeSize - 1;
                 }
             }
 
@@ -216,12 +219,12 @@ namespace BrainfuckRunner.Library.Executors
                 ptrValue += delta;
                 iCmd++;
 
-                if (ptrValue is < byte.MinValue or > byte.MaxValue)
+                ptrValue = ptrValue switch
                 {
-                    ptrValue = (ptrValue < byte.MinValue)
-                        ? byte.MinValue
-                        : byte.MaxValue;
-                }
+                    < byte.MinValue => byte.MinValue,
+                    > byte.MaxValue => byte.MaxValue,
+                    _ => ptrValue
+                };
             }
 
             Engine.Cells[Engine.Pointer] = (byte) ptrValue;
@@ -306,13 +309,13 @@ namespace BrainfuckRunner.Library.Executors
         {
             ptr = Engine.Pointer;
 
-            if (loop.ScanStep != null && loop.ScanStep == 0)
+            if (loop.ScanStep is 0)
             {
                 // not a scan loop
                 return false;
             }
 
-            if (loop.ScanStep == null)
+            if (!loop.ScanStep.HasValue)
             {
                 BfCommand[] commands = Engine.Commands;
                 int iCmd = loop.StartPosition + 1;
